@@ -1,33 +1,70 @@
 /* ========================================================
-   Kanzul Iman Quran & Tafsir - Progressive Web App (PWA)
-   Color Palette: Royal Deep Gold (#BA8316)
+   Kanzul Iman Quran & Tafsir - Adaptive Web Experience
+   • Clean Web Icons (Zero Emojis)
+   • Authentic Original Fonts: Kona, Kohinoor, Saleem Quran, Noto Nastaliq
+   • Desktop: Windows Desktop App (Master-Detail Split Rail)
+   • Mobile: Android App (Material 3 Single-Pane + Bottom Nav)
+   Color Palette: Deep Gold (#BA8316)
    ======================================================== */
 
+/* Bengali: Kona Font Family */
 @font-face {
-  font-family: 'kona';
+  font-family: 'KonaBengali';
   src: url('../fonts/kona.ttf') format('truetype');
-  font-weight: normal;
+  font-weight: 400;
+  font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'kohinoor';
+  font-family: 'KonaBengali';
+  src: url('../fonts/kona_bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Bengali: Kohinoor Font Family */
+@font-face {
+  font-family: 'KohinoorBengali';
   src: url('../fonts/kohinoor.otf') format('opentype');
-  font-weight: normal;
+  font-weight: 400;
+  font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'pdms_saleem';
+  font-family: 'KohinoorBengali';
+  src: url('../fonts/kohinoor_bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Arabic: PDMS Saleem Quran */
+@font-face {
+  font-family: 'SaleemQuran';
   src: url('../fonts/pdms_saleem_quran.ttf') format('truetype');
   font-weight: normal;
+  font-style: normal;
   font-display: swap;
 }
 
+/* Arabic: Al Qalam Quran Majeed */
 @font-face {
-  font-family: 'urdu_font';
-  src: url('../fonts/urdu.ttf') format('truetype');
+  font-family: 'AlQalamQuran';
+  src: url('../fonts/alqalam_quran_majeed.ttf') format('truetype');
   font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Urdu: Noto Nastaliq */
+@font-face {
+  font-family: 'UrduNastaliq';
+  src: url('../fonts/noto_nastaliq_urdu.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
   font-display: swap;
 }
 
@@ -49,9 +86,11 @@
   --arabic-size: 28px;
   --trans-size: 16px;
   --tafsir-size: 15px;
-  --font-bengali: 'kona', 'kohinoor', sans-serif;
-  --font-arabic: 'pdms_saleem', serif;
-  --font-urdu: 'urdu_font', serif;
+
+  /* Default Core Fonts */
+  --font-bengali: 'KonaBengali', 'KohinoorBengali', sans-serif;
+  --font-arabic: 'SaleemQuran', 'AlQalamQuran', serif;
+  --font-urdu: 'UrduNastaliq', serif;
 }
 
 /* Theme: Light */
@@ -92,25 +131,30 @@ html, body {
   color: var(--text-main);
   font-family: var(--font-bengali);
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow: hidden;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-/* App Container */
 #app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  padding-top: calc(env(safe-area-inset-top) + 64px);
-  padding-bottom: calc(env(safe-area-inset-bottom) + 80px);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 }
 
-/* Header */
+.ui-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* ========================================================
+   App Header
+   ======================================================== */
 .app-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
   height: calc(env(safe-area-inset-top) + 64px);
   padding-top: env(safe-area-inset-top);
   background: var(--surface-color);
@@ -121,7 +165,8 @@ html, body {
   padding-left: 16px;
   padding-right: 16px;
   z-index: 100;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.18);
 }
 
 .header-left {
@@ -149,6 +194,61 @@ html, body {
   color: var(--text-muted);
 }
 
+/* Official Store Badges */
+.store-badges-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.store-badge-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-main);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.store-badge-btn:hover {
+  border-color: var(--primary-gold);
+  background: var(--gold-tint);
+  transform: translateY(-1px);
+}
+
+.badge-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.win-badge .badge-icon { color: #00ADEF; }
+.play-badge .badge-icon { color: #00E676; }
+
+.badge-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1.1;
+}
+
+.badge-sub {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-main {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary-gold);
+}
+
 .header-actions {
   display: flex;
   align-items: center;
@@ -167,7 +267,6 @@ html, body {
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s;
-  font-size: 18px;
 }
 
 .btn-icon:hover, .btn-icon.active {
@@ -176,113 +275,191 @@ html, body {
   border-color: var(--primary-gold);
 }
 
-/* Navigation Tabs */
-.nav-tabs {
+/* ========================================================
+   Workspace Layout (Desktop Split vs Mobile Single)
+   ======================================================== */
+.workspace-layout {
   display: flex;
-  background: var(--surface-color);
-  padding: 8px 16px;
-  border-bottom: 1px solid var(--card-border);
-  gap: 8px;
-  overflow-x: auto;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
+  flex: 1;
+  height: calc(100vh - 64px);
+  overflow: hidden;
 }
 
-.nav-tab {
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
+/* Sidebar Pane */
+.sidebar-pane {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-color);
+  border-right: 1px solid var(--card-border);
+  overflow: hidden;
+}
+
+.sidebar-tabs {
+  display: flex;
+  background: var(--card-bg);
+  padding: 6px;
+  gap: 4px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.sidebar-tab {
+  flex: 1;
+  padding: 8px 4px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
   color: var(--text-muted);
   background: transparent;
-  border: 1px solid transparent;
+  border: none;
   cursor: pointer;
+  text-align: center;
   transition: all 0.2s;
+  font-family: var(--font-bengali);
 }
 
-.nav-tab.active {
-  background: var(--gold-tint);
-  color: var(--primary-gold);
+.sidebar-tab.active {
+  background: var(--primary-gold);
+  color: #FFFFFF;
+}
+
+.sidebar-search-box {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.sidebar-search-input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text-main);
+  font-size: 13px;
+  outline: none;
+  font-family: var(--font-bengali);
+}
+
+.sidebar-search-input:focus {
   border-color: var(--primary-gold);
 }
 
-/* Main Content Area */
-.main-container {
+.sidebar-list-container {
   flex: 1;
-  max-width: 900px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 16px;
+  overflow-y: auto;
+  padding: 8px;
 }
 
-/* Surah List Grid */
-.surah-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 12px;
-}
-
-.surah-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 12px;
-  padding: 14px 16px;
+.sidebar-list-item {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid transparent;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  margin-bottom: 6px;
+  background: var(--card-bg);
+  transition: all 0.15s ease;
 }
 
-.surah-card:hover {
-  transform: translateY(-2px);
+.sidebar-list-item:hover {
   border-color: var(--primary-gold);
-  box-shadow: 0 4px 14px var(--gold-glow);
+  background: var(--gold-tint);
 }
 
-.surah-num {
-  width: 36px;
-  height: 36px;
+.sidebar-list-item.active {
+  border-color: var(--primary-gold);
+  background: var(--gold-tint);
+  box-shadow: 0 0 10px var(--gold-glow);
+}
+
+.item-num {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: var(--badge-bg);
   color: var(--primary-gold);
+  font-size: 13px;
   font-weight: 700;
-  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid var(--primary-gold);
+  flex-shrink: 0;
+  margin-right: 10px;
 }
 
-.surah-info {
+.item-info {
   flex: 1;
-  margin-left: 12px;
+  min-width: 0;
 }
 
-.surah-name-bn {
-  font-size: 16px;
+.item-title {
+  font-size: 15px;
   font-weight: 700;
   color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.surah-meta {
-  font-size: 12px;
+.item-sub {
+  font-size: 11px;
   color: var(--text-muted);
 }
 
-.surah-name-ar {
+.item-ar {
   font-family: var(--font-arabic);
   font-size: 20px;
   color: var(--primary-gold);
   direction: rtl;
+  margin-left: 8px;
 }
 
-/* Quran Reader View */
+/* Reading Pane */
+.reading-pane {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  background: var(--bg-color);
+  -webkit-overflow-scrolling: touch;
+}
+
+.desktop-welcome-box {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.welcome-emblem {
+  margin-bottom: 20px;
+}
+
+.welcome-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--primary-gold);
+  color: var(--primary-gold);
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-bengali);
+}
+
+.welcome-btn:hover {
+  background: var(--primary-gold);
+  color: #FFFFFF;
+}
+
+/* ========================================================
+   Reader View Components
+   ======================================================== */
 .reader-header {
   background: var(--surface-color);
   border: 1px solid var(--card-border);
   border-radius: 14px;
-  padding: 16px;
+  padding: 20px;
   margin-bottom: 20px;
   text-align: center;
   box-shadow: 0 3px 12px rgba(0,0,0,0.15);
@@ -290,27 +467,26 @@ html, body {
 
 .reader-title-ar {
   font-family: var(--font-arabic);
-  font-size: 32px;
+  font-size: 34px;
   color: var(--primary-gold);
   margin-bottom: 6px;
   direction: rtl;
 }
 
 .reader-title-bn {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   margin-bottom: 4px;
 }
 
 .reader-bismillah {
   font-family: var(--font-arabic);
-  font-size: 26px;
+  font-size: 28px;
   color: var(--primary-gold-dark);
-  margin-top: 10px;
+  margin-top: 14px;
   direction: rtl;
 }
 
-/* Ayat Card */
 .ayat-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -354,14 +530,15 @@ html, body {
   background: transparent;
   border: 1px solid var(--card-border);
   color: var(--text-muted);
-  padding: 4px 10px;
+  padding: 6px 12px;
   border-radius: 8px;
   font-size: 13px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   transition: all 0.2s;
+  font-family: var(--font-bengali);
 }
 
 .ayat-btn:hover {
@@ -406,13 +583,13 @@ html, body {
   font-style: italic;
 }
 
-/* Tafsir Box */
+/* Tafsir Accordion */
 .tafsir-box {
   margin-top: 12px;
   background: var(--gold-tint);
   border-left: 3px solid var(--primary-gold);
   border-radius: 8px;
-  padding: 12px 14px;
+  padding: 14px 16px;
   font-size: var(--tafsir-size);
   line-height: 1.8;
   display: none;
@@ -425,7 +602,7 @@ html, body {
 .tafsir-header {
   font-weight: 700;
   color: var(--primary-gold);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -433,19 +610,19 @@ html, body {
 
 .tafsir-shaan {
   background: rgba(0,0,0,0.15);
-  padding: 8px 10px;
+  padding: 8px 12px;
   border-radius: 6px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   font-size: 13px;
   color: var(--primary-gold-dark);
 }
 
-/* Mushaf Continuous View */
+/* Mushaf View */
 .mushaf-container {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 14px;
-  padding: 24px;
+  padding: 28px;
   line-height: 2.6;
   text-align: justify;
   direction: rtl;
@@ -466,16 +643,19 @@ html, body {
   margin: 0 4px;
   vertical-align: middle;
   background: var(--badge-bg);
+  cursor: pointer;
 }
 
-/* Tajweed Colors */
+/* Tajweed Classes */
 .tajweed-ghunna { color: #FF7F00; font-weight: bold; }
 .tajweed-ikhfa { color: #29B6F6; font-weight: bold; }
 .tajweed-qalqalah { color: #4CAF50; font-weight: bold; }
 .tajweed-iqlab { color: #AB47BC; font-weight: bold; }
 .tajweed-madd { color: #EC407A; font-weight: bold; }
 
-/* Audio Player Bar */
+/* ========================================================
+   Floating Audio Player Bar
+   ======================================================== */
 .audio-bar {
   position: fixed;
   bottom: 0;
@@ -488,10 +668,10 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 16px;
-  padding-right: 16px;
-  z-index: 100;
-  box-shadow: 0 -3px 12px rgba(0,0,0,0.25);
+  padding-left: 20px;
+  padding-right: 20px;
+  z-index: 150;
+  box-shadow: 0 -3px 15px rgba(0,0,0,0.3);
   display: none;
 }
 
@@ -518,7 +698,7 @@ html, body {
 .audio-controls {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .btn-play {
@@ -536,13 +716,101 @@ html, body {
   box-shadow: 0 2px 8px var(--gold-glow);
 }
 
-/* Settings Drawer */
-.drawer-backdrop {
+/* ========================================================
+   Mobile Promo & Bottom Navigation
+   ======================================================== */
+.mobile-store-promo {
+  padding: 16px;
+  background: var(--gold-tint);
+  border-top: 1px solid var(--card-border);
+  display: none;
+}
+
+.promo-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary-gold);
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.promo-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.promo-btn {
+  text-decoration: none;
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-btn {
+  background: #01875F;
+  color: #FFFFFF;
+}
+
+.win-btn {
+  background: #0078D4;
+  color: #FFFFFF;
+}
+
+.mobile-bottom-nav {
+  display: none;
   position: fixed;
-  top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  height: calc(env(safe-area-inset-bottom) + 56px);
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--surface-color);
+  border-top: 1px solid var(--card-border);
+  z-index: 120;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px 0;
+  transition: all 0.2s;
+  font-family: var(--font-bengali);
+}
+
+.bottom-nav-item.active {
+  color: var(--primary-gold);
+}
+
+.nav-icon {
+  margin-bottom: 2px;
+}
+
+.nav-label {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* ========================================================
+   Settings Drawer & Modals
+   ======================================================== */
+.drawer-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.5);
   z-index: 200;
   opacity: 0;
@@ -557,10 +825,8 @@ html, body {
 
 .settings-drawer {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 340px;
+  top: 0; right: 0; bottom: 0;
+  width: 360px;
   max-width: 85vw;
   background: var(--surface-color);
   z-index: 210;
@@ -624,6 +890,7 @@ html, body {
   font-weight: 600;
   cursor: pointer;
   text-align: center;
+  font-family: var(--font-bengali);
 }
 
 .theme-btn.active {
@@ -632,7 +899,6 @@ html, body {
   color: var(--primary-gold);
 }
 
-/* Toast Snackbar */
 .toast {
   position: fixed;
   bottom: 80px;
@@ -649,6 +915,7 @@ html, body {
   z-index: 300;
   box-shadow: 0 4px 15px rgba(0,0,0,0.3);
   pointer-events: none;
+  font-family: var(--font-bengali);
 }
 
 .toast.show {
@@ -656,13 +923,9 @@ html, body {
   opacity: 1;
 }
 
-/* Modal Search */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.6);
   z-index: 250;
   display: none;
@@ -694,6 +957,7 @@ html, body {
   color: var(--text-main);
   font-size: 16px;
   outline: none;
+  font-family: var(--font-bengali);
 }
 
 .search-results {
@@ -714,4 +978,79 @@ html, body {
 
 .search-item:hover {
   background: var(--gold-tint);
+}
+
+/* ========================================================
+   RESPONSIVE DESIGN BREAKPOINTS
+   ======================================================== */
+
+@media (min-width: 1024px) {
+  /* Desktop Windows Split Layout */
+  .sidebar-pane {
+    width: 360px;
+    flex-shrink: 0;
+  }
+
+  .reading-pane {
+    padding: 30px 40px;
+  }
+
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+
+  .mobile-back-btn {
+    display: none !important;
+  }
+
+  .store-badges-container {
+    display: flex;
+  }
+
+  .mobile-store-promo {
+    display: block;
+  }
+}
+
+@media (max-width: 1023px) {
+  /* Mobile Android App Experience */
+  .store-badges-container {
+    display: none;
+  }
+
+  .mobile-store-promo {
+    display: block;
+  }
+
+  .mobile-bottom-nav {
+    display: flex;
+  }
+
+  .workspace-layout {
+    height: calc(100vh - 64px - 56px);
+  }
+
+  body.mobile-reader-active .sidebar-pane {
+    display: none !important;
+  }
+
+  body.mobile-reader-active .reading-pane {
+    display: block !important;
+    width: 100% !important;
+    padding: 16px;
+  }
+
+  body:not(.mobile-reader-active) .reading-pane {
+    display: none !important;
+  }
+
+  body:not(.mobile-reader-active) .sidebar-pane {
+    display: flex !important;
+    width: 100% !important;
+    border-right: none;
+  }
+
+  .mobile-back-btn {
+    display: flex;
+  }
 }

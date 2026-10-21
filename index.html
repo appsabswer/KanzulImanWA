@@ -23,71 +23,222 @@
 <body class="theme-dark">
 
   <div id="app">
-    <!-- Top Header -->
+    <!-- Top Header (Desktop Windows Style / Mobile Android Style) -->
     <header class="app-header">
       <div class="header-left">
+        <!-- Back button on mobile reader -->
+        <button class="btn-icon mobile-back-btn" id="btnMobileBack" style="display:none;" title="তালিকায় ফিরুন">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
         <img src="icons/icon-192.png" alt="Logo" class="brand-icon">
-        <div>
-          <div class="brand-title">কানযুল ঈমান</div>
-          <div class="brand-subtitle">কুরআন ও খাযাইনুল ইরফান তাফসীর</div>
+        <div class="brand-texts">
+          <div class="brand-title" id="topHeaderTitle">কানযুল ঈমান</div>
+          <div class="brand-subtitle" id="topHeaderSubtitle">কুরআন ও খাযাইনুল ইরফান তাফসীর</div>
         </div>
       </div>
+
+      <!-- App Store Badges (Microsoft Store & Google Play) -->
+      <div class="store-badges-container">
+        <a href="https://apps.microsoft.com/detail/9n96n14jd5n6?cid=DevShareMCLPCS" target="_blank" rel="noopener" class="store-badge-btn win-badge" title="Microsoft Store থেকে Windows App ডাউনলোড করুন">
+          <svg class="badge-icon" viewBox="0 0 88 88" fill="currentColor">
+            <path d="M0 12.402l35.687-4.86.016 34.423-35.67.202L0 12.402zm35.67 33.529l.028 34.453L.028 75.48.016 46.129l35.654-.198zM40.065 6.843L87.95 0v41.527l-47.885.344V6.843zm47.896 39.539l-.011 41.618-47.885-6.744V46.038l47.896.344z"/>
+          </svg>
+          <div class="badge-text">
+            <span class="badge-sub">Get it on</span>
+            <span class="badge-main">Windows Store</span>
+          </div>
+        </a>
+
+        <a href="https://play.google.com/store/apps/details?id=com.abswer.kanzuliman" target="_blank" rel="noopener" class="store-badge-btn play-badge" title="Google Play থেকে Android App ডাউনলোড করুন">
+          <svg class="badge-icon" viewBox="0 0 512 512" fill="currentColor">
+            <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/>
+          </svg>
+          <div class="badge-text">
+            <span class="badge-sub">Get it on</span>
+            <span class="badge-main">Google Play</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Header Action Controls -->
       <div class="header-actions">
-        <button class="btn-icon" id="btnSearch" title="অনুসন্ধান (Ctrl+F)">🔍</button>
-        <button class="btn-icon" id="btnTajweed" title="তাজবীদ কালার">🎨</button>
-        <button class="btn-icon" id="btnMushaf" title="মুসহাফ পাঠ">📖</button>
-        <button class="btn-icon" id="btnSettings" title="সেটিংস">⚙️</button>
+        <!-- Search -->
+        <button class="btn-icon" id="btnSearch" title="অনুসন্ধান (Ctrl+F)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+
+        <!-- Tajweed -->
+        <button class="btn-icon" id="btnTajweed" title="তাজবীদ কালার">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
+            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
+            <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
+            <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle>
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path>
+          </svg>
+        </button>
+
+        <!-- Mushaf -->
+        <button class="btn-icon" id="btnMushaf" title="মুসহাফ পাঠ">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+        </button>
+
+        <!-- Settings -->
+        <button class="btn-icon" id="btnSettings" title="সেটিংস">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
       </div>
     </header>
 
-    <!-- Navigation Tabs -->
-    <nav class="nav-tabs">
-      <button class="nav-tab active" data-target="surah">সূরা তালিকা (১১৪)</button>
-      <button class="nav-tab" data-target="para">পারা তালিকা (৩০)</button>
-      <button class="nav-tab" data-target="reader">কুরআন রিডার</button>
-      <button class="nav-tab" data-target="sajdah">সিজদাহ্ ও হুকুম (১৪)</button>
-      <button class="nav-tab" data-target="about">প্রবন্ধ ও তথ্যসূত্র</button>
+    <!-- Main Workspace -->
+    <div class="workspace-layout">
+      <!-- Left Sidebar (Desktop Windows Navigation Rail / Mobile List) -->
+      <aside class="sidebar-pane" id="sidebarPane">
+        <div class="sidebar-tabs">
+          <button class="sidebar-tab active" data-target="surah">সূরা তালিকা (১১৪)</button>
+          <button class="sidebar-tab" data-target="para">পারা (৩০)</button>
+          <button class="sidebar-tab" data-target="sajdah">সিজদাহ্ (১৪)</button>
+          <button class="sidebar-tab" data-target="about">প্রবন্ধ</button>
+        </div>
+
+        <div class="sidebar-search-box">
+          <input type="text" class="sidebar-search-input" id="sidebarSearch" placeholder="দ্রুত খুঁজুন (নাম বা নম্বর)...">
+        </div>
+
+        <div class="sidebar-list-container">
+          <div class="sidebar-list active" id="listSurahs"></div>
+          <div class="sidebar-list" id="listParas" style="display:none;"></div>
+          <div class="sidebar-list" id="listSajdahs" style="display:none;"></div>
+          <div class="sidebar-list" id="listAbout" style="display:none;"></div>
+        </div>
+
+        <!-- Mobile Download Promo Card -->
+        <div class="mobile-store-promo">
+          <div class="promo-title">আমাদের অফিশিয়াল অ্যাপস</div>
+          <div class="promo-buttons">
+            <a href="https://play.google.com/store/apps/details?id=com.abswer.kanzuliman" target="_blank" rel="noopener" class="promo-btn play-btn">
+              <svg width="15" height="15" viewBox="0 0 512 512" fill="currentColor" style="vertical-align:middle; margin-right:6px;"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>Android App (Play Store)
+            </a>
+            <a href="https://apps.microsoft.com/detail/9n96n14jd5n6?cid=DevShareMCLPCS" target="_blank" rel="noopener" class="promo-btn win-btn">
+              <svg width="14" height="14" viewBox="0 0 88 88" fill="currentColor" style="vertical-align:middle; margin-right:6px;"><path d="M0 12.402l35.687-4.86.016 34.423-35.67.202L0 12.402zm35.67 33.529l.028 34.453L.028 75.48.016 46.129l35.654-.198zM40.065 6.843L87.95 0v41.527l-47.885.344V6.843zm47.896 39.539l-.011 41.618-47.885-6.744V46.038l47.896.344z"/></svg>Windows App (Store)
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Main Reading Pane (Desktop & Mobile) -->
+      <main class="reading-pane" id="readingPane">
+        <div id="readerContent">
+          <!-- Desktop Welcome Emblem & Guide -->
+          <div class="desktop-welcome-box">
+            <div class="welcome-emblem">
+              <svg width="72" height="72" viewBox="0 0 100 100" fill="none">
+                <path d="M50 0L64.6 14.6L85.4 14.6L85.4 35.4L100 50L85.4 64.6L85.4 85.4L64.6 85.4L50 100L35.4 85.4L14.6 85.4L14.6 64.6L0 50L14.6 35.4L14.6 14.6L35.4 14.6Z" stroke="#BA8316" stroke-width="3" fill="rgba(186,131,22,0.12)"/>
+                <circle cx="50" cy="50" r="28" stroke="#BA8316" stroke-width="2"/>
+                <path d="M38 42h24M50 42v20M42 62h16" stroke="#BA8316" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h2 style="color:var(--primary-gold); margin-bottom:8px; font-size:24px;">কানযুল ঈমান কুরআন ও তাফসীর</h2>
+            <p style="color:var(--text-muted); max-width:540px; margin:0 auto 24px; line-height:1.8;">
+              বাম পাশের তালিকা থেকে যেকোনো সূরা বা পারা নির্বাচন করুন। সম্পূর্ণ ১১৪টি সূরা, বিশুদ্ধ কানযুল ঈমান বাংলা ও উর্দু অনুবাদ, এবং খাযাইনুল ইরফান তাফসীর পাঠ করুন।
+            </p>
+            <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+              <button class="welcome-btn" onclick="loadSurah(1)">১. সূরা ফাতিহা</button>
+              <button class="welcome-btn" onclick="loadSurah(36)">৩৬. সূরা ইয়াসীন</button>
+              <button class="welcome-btn" onclick="loadSurah(55)">৫৫. সূরা আর-রহমান</button>
+              <button class="welcome-btn" onclick="loadSurah(67)">৬৭. সূরা মুলক</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Mobile Material 3 Bottom Navigation Bar (Mobile only) -->
+    <nav class="mobile-bottom-nav">
+      <button class="bottom-nav-item active" data-nav="surah">
+        <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+        </svg>
+        <span class="nav-label">সূরা</span>
+      </button>
+
+      <button class="bottom-nav-item" data-nav="para">
+        <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        <span class="nav-label">পারা</span>
+      </button>
+
+      <button class="bottom-nav-item" data-nav="sajdah">
+        <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+        <span class="nav-label">সিজদাহ্</span>
+      </button>
+
+      <button class="bottom-nav-item" data-nav="about">
+        <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        <span class="nav-label">প্রবন্ধ</span>
+      </button>
+
+      <button class="bottom-nav-item" data-nav="settings">
+        <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        <span class="nav-label">সেটিংস</span>
+      </button>
     </nav>
 
-    <!-- Main Container -->
-    <main class="main-container">
-      <!-- 1. Surah List View -->
-      <section id="viewSurahList">
-        <div class="surah-grid" id="surahGrid"></div>
-      </section>
-
-      <!-- 2. Para List View -->
-      <section id="viewParaList" style="display:none;">
-        <div class="surah-grid" id="paraGrid"></div>
-      </section>
-
-      <!-- 3. Reader View -->
-      <section id="viewReader" style="display:none;">
-        <div id="readerContent"></div>
-      </section>
-
-      <!-- 4. Sajdah View -->
-      <section id="viewSajdah" style="display:none;">
-        <div id="sajdahList"></div>
-      </section>
-
-      <!-- 5. About Articles View -->
-      <section id="viewAbout" style="display:none;">
-        <div id="aboutList"></div>
-      </section>
-    </main>
-
-    <!-- Bottom Audio Player Bar -->
+    <!-- Floating Audio Player Bar -->
     <div class="audio-bar" id="audioBar">
       <div class="audio-info">
         <span class="audio-title" id="audioTitle">সূরা তিলাওয়াত</span>
         <span class="audio-meta" id="audioMeta">কারী মিশারি রাশিদ আল-আফাসী</span>
       </div>
       <div class="audio-controls">
-        <button class="ayat-btn" id="btnPrevAya">⏮</button>
-        <button class="btn-play" id="btnPlayPause">▶</button>
-        <button class="ayat-btn" id="btnNextAya">⏭</button>
-        <button class="ayat-btn" id="btnStopAudio" style="color:#E91E63;">⏹</button>
+        <button class="ayat-btn" id="btnPrevAya" title="পূর্ববর্তী আয়াত">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="19 20 9 12 19 4 19 20"></polygon>
+            <line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2.5"></line>
+          </svg>
+        </button>
+        <button class="btn-play" id="btnPlayPause" title="প্লে / পজ">
+          <svg id="svgPlayPauseIcon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+        </button>
+        <button class="ayat-btn" id="btnNextAya" title="পরবর্তী আয়াত">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 4 15 12 5 20 5 4"></polygon>
+            <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2.5"></line>
+          </svg>
+        </button>
+        <button class="ayat-btn" id="btnStopAudio" style="color:#E91E63;" title="বন্ধ করুন">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
@@ -96,8 +247,38 @@
   <div class="drawer-backdrop" id="drawerBackdrop"></div>
   <aside class="settings-drawer" id="settingsDrawer">
     <div class="drawer-header">
-      <div class="drawer-title">⚙️ সেটিংস ও পছন্দসমূহ</div>
-      <button class="btn-icon" id="btnCloseDrawer">✕</button>
+      <div class="drawer-title">সেটিংস ও পছন্দসমূহ</div>
+      <button class="btn-icon" id="btnCloseDrawer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Official Store Badges in Drawer -->
+    <div class="setting-group" style="background:var(--gold-tint); border:1px solid var(--primary-gold); border-radius:10px; padding:12px;">
+      <div style="font-weight:700; color:var(--primary-gold); margin-bottom:8px; font-size:13px;">অফিশিয়াল অ্যাপ্লিকেশন ডাউনলোড:</div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <a href="https://apps.microsoft.com/detail/9n96n14jd5n6?cid=DevShareMCLPCS" target="_blank" rel="noopener" style="text-decoration:none; display:flex; align-items:center; gap:10px; background:var(--card-bg); padding:10px 12px; border-radius:8px; color:var(--text-main); font-size:13px; border:1px solid var(--card-border);">
+          <svg width="20" height="20" viewBox="0 0 88 88" fill="#00ADEF">
+            <path d="M0 12.402l35.687-4.86.016 34.423-35.67.202L0 12.402zm35.67 33.529l.028 34.453L.028 75.48.016 46.129l35.654-.198zM40.065 6.843L87.95 0v41.527l-47.885.344V6.843zm47.896 39.539l-.011 41.618-47.885-6.744V46.038l47.896.344z"/>
+          </svg>
+          <div>
+            <strong>Windows Desktop App</strong>
+            <div style="font-size:11px; color:var(--text-muted);">Microsoft Store থেকে ইনস্টল করুন</div>
+          </div>
+        </a>
+        <a href="https://play.google.com/store/apps/details?id=com.abswer.kanzuliman" target="_blank" rel="noopener" style="text-decoration:none; display:flex; align-items:center; gap:10px; background:var(--card-bg); padding:10px 12px; border-radius:8px; color:var(--text-main); font-size:13px; border:1px solid var(--card-border);">
+          <svg width="20" height="20" viewBox="0 0 512 512" fill="#00E676">
+            <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/>
+          </svg>
+          <div>
+            <strong>Android Mobile App</strong>
+            <div style="font-size:11px; color:var(--text-muted);">Google Play Store থেকে ইনস্টল করুন</div>
+          </div>
+        </a>
+      </div>
     </div>
 
     <!-- Theme Selection -->
@@ -116,7 +297,7 @@
         <span>আরবি ফন্ট সাইজ</span>
         <span id="lblArabicSize">28px</span>
       </div>
-      <input type="range" min="20" max="44" value="28" class="setting-slider" id="sliderArabic">
+      <input type="range" min="20" max="46" value="28" class="setting-slider" id="sliderArabic">
     </div>
 
     <div class="setting-group">
@@ -153,7 +334,7 @@
     </div>
 
     <div style="margin-top:30px; font-size:12px; color:var(--text-muted); text-align:center;">
-      কানযুল ঈমান কুরআন ও তাফসীর v1.0.0 (PWA)<br>
+      কানযুল ঈমান কুরআন ও তাফসীর v1.0.0<br>
       © 2026 Mohammad Norul Abswer
     </div>
   </aside>
@@ -161,7 +342,16 @@
   <!-- Global Search Modal -->
   <div class="modal-overlay" id="modalSearch">
     <div class="modal-content">
-      <input type="text" class="search-input" id="searchInput" placeholder="সূরা বা পারার নাম খুঁজুন (যেমন: ইয়াসীন, রহমান, ১১৪)...">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <strong style="color:var(--primary-gold); font-size:16px;">কুরআন অনুসন্ধান</strong>
+        <button class="btn-icon" onclick="closeSearch()" style="width:32px; height:32px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <input type="text" class="search-input" id="searchInput" placeholder="সূরা বা পারার নাম লিখুন (যেমন: ইয়াসীন, রহমান, ১৮, ১১৪)...">
       <div class="search-results" id="searchResults"></div>
     </div>
   </div>

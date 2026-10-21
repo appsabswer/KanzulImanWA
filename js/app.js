@@ -1,5 +1,7 @@
 /* ========================================================
    Kanzul Iman Quran & Tafsir - Progressive Web App Logic
+   • Clean SVG Web Icons (Zero Emojis)
+   • Adaptive: Windows Desktop (Master-Detail) & Android (Single-Pane)
    ======================================================== */
 
 // Register Service Worker for 100% Offline Support
@@ -17,7 +19,7 @@ const State = {
   sajdahs: [],
   about: [],
   currentSurah: null,
-  activeTab: 'surah', // 'surah' | 'para' | 'reader' | 'mushaf' | 'sajdah' | 'about'
+  activeSidebarTab: 'surah', // 'surah' | 'para' | 'sajdah' | 'about'
   viewMode: 'reader', // 'reader' | 'mushaf'
   tajweedEnabled: localStorage.getItem('ki_tajweed') === 'true',
   audio: new Audio(),
@@ -35,7 +37,16 @@ const State = {
   }
 };
 
-// Bangladish / English Number mapping
+// SVG Icon Helpers
+const ICONS = {
+  play: `<svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`,
+  pause: `<svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`,
+  book: `<svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+  copy: `<svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
+  speaker: `<svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`
+};
+
+// Bengali Numbers
 const toBnNum = (num) => {
   const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
   return String(num).replace(/[0-9]/g, d => bnDigits[d]);
@@ -54,16 +65,11 @@ function applyTajweed(arabicText) {
   if (!State.tajweedEnabled || !arabicText) return arabicText;
 
   let text = arabicText;
-  // Ghunna (نّ / مّ)
   text = text.replace(/([نم]ّ[ًٌٍَُِ]?)/g, '<span class="tajweed-ghunna">$1</span>');
-  // Iqlab (small meem ۢ / ۨ)
   text = text.replace(/([\u06e2\u06e8])/g, '<span class="tajweed-iqlab">$1</span>');
-  // Madd marks (~ / ٓ / ٰ)
   text = text.replace(/([\u0653\u06e4\u0670])/g, '<span class="tajweed-madd">$1</span>');
-  // Qalqalah (ق ط ب ج د with sukun)
   text = text.replace(/([قطبجد]ْ)/g, '<span class="tajweed-qalqalah">$1</span>');
-  // Ikhfa pattern approximation
-  text = text.replace(/(نْ|[ًٌٍ])\s*([تثجدذزسشصضطظفقك])/g, '<span class="tajweed-ikhfa">$1 $2</span>');
+  text = text.replace(/(نْ|[ًٌٍ])\s*([تثجدذزسশصضطظفقك])/g, '<span class="tajweed-ikhfa">$1 $2</span>');
 
   return text;
 }
@@ -86,10 +92,15 @@ async function initApp() {
     State.sajdahs = sajdahsRes;
     State.about = aboutRes;
 
-    renderSurahList();
-    renderParaList();
-    renderSajdahList();
-    renderAboutArticles();
+    renderSidebarSurahs();
+    renderSidebarParas();
+    renderSidebarSajdahs();
+    renderSidebarAbout();
+
+    // Default load Surah 1 on Desktop
+    if (window.innerWidth >= 1024) {
+      loadSurah(1);
+    }
   } catch (err) {
     console.error('Error loading data:', err);
     showToast('ডাটা লোড করতে সমস্যা হয়েছে!');
@@ -101,22 +112,54 @@ async function initApp() {
 
 // Setup Event Listeners
 function setupEventListeners() {
-  // Navigation Tabs
-  document.querySelectorAll('.nav-tab').forEach(tab => {
-    tab.addEventListener('click', (e) => {
-      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  // Mobile Back Button
+  document.getElementById('btnMobileBack').addEventListener('click', () => {
+    document.body.classList.remove('mobile-reader-active');
+    document.getElementById('btnMobileBack').style.display = 'none';
+    document.getElementById('topHeaderTitle').textContent = 'কানযুল ঈমান';
+    document.getElementById('topHeaderSubtitle').textContent = 'কুরআন ও খাযাইনুল ইরফান তাফসীর';
+  });
+
+  // Sidebar Tabs (Desktop + Mobile)
+  document.querySelectorAll('.sidebar-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       const target = tab.dataset.target;
-      switchTab(target);
+      switchSidebarTab(target);
     });
   });
 
-  // Settings Drawer Toggle
-  document.getElementById('btnSettings').addEventListener('click', () => {
-    document.getElementById('settingsDrawer').classList.add('open');
-    document.getElementById('drawerBackdrop').classList.add('open');
+  // Mobile Bottom Navigation
+  document.querySelectorAll('.bottom-nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const nav = item.dataset.nav;
+      if (nav === 'settings') {
+        openDrawer();
+        return;
+      }
+
+      document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+
+      document.body.classList.remove('mobile-reader-active');
+      document.getElementById('btnMobileBack').style.display = 'none';
+
+      // Sync sidebar tab
+      document.querySelectorAll('.sidebar-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.target === nav);
+      });
+      switchSidebarTab(nav);
+    });
   });
 
+  // Sidebar Search Box Filter
+  document.getElementById('sidebarSearch').addEventListener('input', (e) => {
+    filterSidebarSurahs(e.target.value.trim().toLowerCase());
+  });
+
+  // Settings Drawer Toggle
+  document.getElementById('btnSettings').addEventListener('click', openDrawer);
   document.getElementById('btnCloseDrawer').addEventListener('click', closeDrawer);
   document.getElementById('drawerBackdrop').addEventListener('click', closeDrawer);
 
@@ -143,12 +186,11 @@ function setupEventListeners() {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const theme = btn.dataset.theme;
-      applyTheme(theme);
+      applyTheme(btn.dataset.theme);
     });
   });
 
-  // Translation Display Toggles
+  // Translation Visibility Toggles
   document.getElementById('chkBn').addEventListener('change', (e) => {
     State.settings.showBn = e.target.checked;
     localStorage.setItem('ki_show_bn', e.target.checked);
@@ -195,9 +237,9 @@ function setupEventListeners() {
   document.getElementById('modalSearch').addEventListener('click', (e) => {
     if (e.target.id === 'modalSearch') closeSearch();
   });
-  document.getElementById('searchInput').addEventListener('input', handleSearch);
+  document.getElementById('searchInput').addEventListener('input', handleGlobalSearch);
 
-  // Global Shortcut
+  // Global Keyboard Shortcut
   window.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
       e.preventDefault();
@@ -214,6 +256,11 @@ function setupEventListeners() {
   document.getElementById('btnStopAudio').addEventListener('click', stopAudio);
   document.getElementById('btnNextAya').addEventListener('click', playNextAya);
   document.getElementById('btnPrevAya').addEventListener('click', playPrevAya);
+}
+
+function openDrawer() {
+  document.getElementById('settingsDrawer').classList.add('open');
+  document.getElementById('drawerBackdrop').classList.add('open');
 }
 
 function closeDrawer() {
@@ -247,15 +294,15 @@ function applyFontSizes() {
   document.getElementById('sliderTafsir').value = State.settings.tafsirSize;
 }
 
-function switchTab(tabName) {
-  State.activeTab = tabName;
-  document.getElementById('viewSurahList').style.display = tabName === 'surah' ? 'block' : 'none';
-  document.getElementById('viewParaList').style.display = tabName === 'para' ? 'block' : 'none';
-  document.getElementById('viewReader').style.display = (tabName === 'reader' || tabName === 'mushaf') ? 'block' : 'none';
-  document.getElementById('viewSajdah').style.display = tabName === 'sajdah' ? 'block' : 'none';
-  document.getElementById('viewAbout').style.display = tabName === 'about' ? 'block' : 'none';
+function switchSidebarTab(tabName) {
+  State.activeSidebarTab = tabName;
+  document.getElementById('listSurahs').style.display = tabName === 'surah' ? 'block' : 'none';
+  document.getElementById('listParas').style.display = tabName === 'para' ? 'block' : 'none';
+  document.getElementById('listSajdahs').style.display = tabName === 'sajdah' ? 'block' : 'none';
+  document.getElementById('listAbout').style.display = tabName === 'about' ? 'block' : 'none';
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Toggle search box visibility for non-surah tabs
+  document.getElementById('sidebarSearch').style.display = (tabName === 'surah' || tabName === 'para') ? 'block' : 'none';
 }
 
 function setReaderMode(mode) {
@@ -268,64 +315,82 @@ function setReaderMode(mode) {
   }
 }
 
-// Render Surah List
-function renderSurahList() {
-  const container = document.getElementById('surahGrid');
-  container.innerHTML = State.suras.map(s => `
-    <div class="surah-card" onclick="loadSurah(${s.sura_index})">
-      <div class="surah-num">${toBnNum(s.sura_index)}</div>
-      <div class="surah-info">
-        <div class="surah-name-bn">সূরা ${s.name_bn}</div>
-        <div class="surah-meta">${s.type_bn} • ${toBnNum(s.total_ayats)} আয়াত</div>
+// Render Sidebar Surahs List
+function renderSidebarSurahs(filtered = null) {
+  const list = filtered || State.suras;
+  const container = document.getElementById('listSurahs');
+  container.innerHTML = list.map(s => {
+    const isCurrent = State.currentSurah && State.currentSurah.sura.sura_index === s.sura_index;
+    return `
+      <div class="sidebar-list-item ${isCurrent ? 'active' : ''}" id="sidebar-surah-${s.sura_index}" onclick="loadSurah(${s.sura_index})">
+        <div class="item-num">${toBnNum(s.sura_index)}</div>
+        <div class="item-info">
+          <div class="item-title">সূরা ${s.name_bn}</div>
+          <div class="item-sub">${s.type_bn} • ${toBnNum(s.total_ayats)} আয়াত</div>
+        </div>
+        <div class="item-ar">${s.name_ar}</div>
       </div>
-      <div class="surah-name-ar">${s.name_ar}</div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
-// Render Para List
-function renderParaList() {
-  const container = document.getElementById('paraGrid');
+function filterSidebarSurahs(query) {
+  if (!query) {
+    renderSidebarSurahs();
+    return;
+  }
+  const filtered = State.suras.filter(s =>
+    String(s.sura_index).includes(query) ||
+    s.name_bn.toLowerCase().includes(query) ||
+    s.name_ar.includes(query) ||
+    (s.name_en && s.name_en.toLowerCase().includes(query))
+  );
+  renderSidebarSurahs(filtered);
+}
+
+// Render Sidebar Paras List
+function renderSidebarParas() {
+  const container = document.getElementById('listParas');
   container.innerHTML = State.paras.map(p => `
-    <div class="surah-card" onclick="loadSurah(${p.start_sura}, null, ${p.start_aya})">
-      <div class="surah-num">${toBnNum(p.para_no)}</div>
-      <div class="surah-info">
-        <div class="surah-name-bn">পারা ${toBnNum(p.para_no)} (${p.name_bn})</div>
-        <div class="surah-meta">সূরা ${toBnNum(p.start_sura)}:${toBnNum(p.start_aya)} থেকে ${toBnNum(p.end_sura)}:${toBnNum(p.end_aya)}</div>
+    <div class="sidebar-list-item" onclick="loadSurah(${p.start_sura}, null, ${p.start_aya})">
+      <div class="item-num">${toBnNum(p.para_no)}</div>
+      <div class="item-info">
+        <div class="item-title">পারা ${toBnNum(p.para_no)} (${p.name_bn})</div>
+        <div class="item-sub">সূরা ${toBnNum(p.start_sura)}:${toBnNum(p.start_aya)} হতে ${toBnNum(p.end_sura)}:${toBnNum(p.end_aya)}</div>
       </div>
-      <div class="surah-name-ar">${p.name_ar}</div>
+      <div class="item-ar">${p.name_ar}</div>
     </div>
   `).join('');
 }
 
-// Render Sajdah List
-function renderSajdahList() {
-  const container = document.getElementById('sajdahList');
+// Render Sidebar Sajdahs List
+function renderSidebarSajdahs() {
+  const container = document.getElementById('listSajdahs');
   container.innerHTML = State.sajdahs.map(s => `
-    <div class="ayat-card">
-      <div class="ayat-top-bar">
-        <span class="ayat-badge">সিজদাহ্ নং ${toBnNum(s.sajdah_no)}</span>
-        <button class="ayat-btn" onclick="loadSurah(${s.sura_index}, null, ${s.aya_index})">📖 আয়াতে যান</button>
+    <div class="ayat-card" style="margin-bottom:12px; padding:14px;">
+      <div class="ayat-top-bar" style="margin-bottom:8px; padding-bottom:6px;">
+        <span class="ayat-badge">সিজদাহ্ ${toBnNum(s.sajdah_no)}</span>
+        <button class="ayat-btn" onclick="loadSurah(${s.sura_index}, null, ${s.aya_index})">${ICONS.book} আয়াতে যান</button>
       </div>
-      <div style="font-weight:700; color:var(--primary-gold); margin-bottom:6px;">
-        সূরা ${s.sura_name_bn} (${s.sura_name_ar}) — আয়াত: ${toBnNum(s.aya_index)} (পারা: ${toBnNum(s.juz_no)})
+      <div style="font-weight:700; color:var(--primary-gold); font-size:14px; margin-bottom:4px;">
+        সূরা ${s.sura_name_bn} (${s.sura_name_ar}) — আয়াত: ${toBnNum(s.aya_index)}
       </div>
-      <div style="font-size:14px; margin-bottom:8px;">${s.verse_context_bn}</div>
-      <div style="background:var(--gold-tint); padding:8px 12px; border-radius:8px; font-size:13px; border-left:3px solid var(--primary-gold);">
-        <strong>হুকুম (হানাফি মাযহাব):</strong> ${s.hukm_bn}
+      <div style="font-size:12px; margin-bottom:6px;">${s.verse_context_bn}</div>
+      <div style="background:var(--gold-tint); padding:6px 10px; border-radius:6px; font-size:12px; border-left:3px solid var(--primary-gold);">
+        <strong>হুকুম (হানাফি):</strong> ${s.hukm_bn}
       </div>
     </div>
   `).join('');
 }
 
-// Render About Articles
-function renderAboutArticles() {
-  const container = document.getElementById('aboutList');
+// Render Sidebar About Articles
+function renderSidebarAbout() {
+  const container = document.getElementById('listAbout');
   container.innerHTML = State.about.map(a => `
-    <div class="ayat-card" style="margin-bottom:20px;">
-      <h3 style="color:var(--primary-gold); margin-bottom:8px;">${a.title_bn || a.title_ur}</h3>
-      <div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">লেখক: ${a.author_bn || a.author_ur} | গ্রন্থ: ${a.work_name_bn || a.work_name_ur}</div>
-      <div style="line-height:1.8; white-space:pre-line;">${a.content_bn || a.content_ur}</div>
+    <div class="ayat-card" style="margin-bottom:14px; padding:14px;">
+      <h4 style="color:var(--primary-gold); margin-bottom:6px; font-size:15px;">${a.title_bn || a.title_ur}</h4>
+      <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">লেখক: ${a.author_bn || a.author_ur}</div>
+      <div style="line-height:1.7; font-size:13px; white-space:pre-line;">${a.content_bn || a.content_ur}</div>
     </div>
   `).join('');
 }
@@ -336,9 +401,18 @@ async function loadSurah(suraIndex, callback, targetAya = null) {
     const res = await fetch(`./data/surah/${suraIndex}.json`);
     State.currentSurah = await res.json();
 
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.querySelector('.nav-tab[data-target="reader"]').classList.add('active');
-    switchTab('reader');
+    // On Mobile: Switch to Reader Pane and Show Back Button
+    if (window.innerWidth < 1024) {
+      document.body.classList.add('mobile-reader-active');
+      document.getElementById('btnMobileBack').style.display = 'flex';
+      document.getElementById('topHeaderTitle').textContent = `সূরা ${State.currentSurah.sura.name_bn}`;
+      document.getElementById('topHeaderSubtitle').textContent = `${State.currentSurah.sura.type_bn} • ${toBnNum(State.currentSurah.sura.total_ayats)} আয়াত`;
+    }
+
+    // Highlight active in sidebar
+    document.querySelectorAll('.sidebar-list-item').forEach(el => el.classList.remove('active'));
+    const sideItem = document.getElementById(`sidebar-surah-${suraIndex}`);
+    if (sideItem) sideItem.classList.add('active');
 
     if (State.viewMode === 'mushaf') {
       renderMushafView();
@@ -352,7 +426,10 @@ async function loadSurah(suraIndex, callback, targetAya = null) {
       setTimeout(() => {
         const el = document.getElementById(`ayat-${targetAya}`);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 300);
+      }, 250);
+    } else {
+      const readingPane = document.getElementById('readingPane');
+      if (readingPane) readingPane.scrollTo({ top: 0, behavior: 'smooth' });
     }
   } catch (err) {
     console.error('Error loading surah:', err);
@@ -391,9 +468,9 @@ function renderReaderView() {
             ${sajdahBadge}
           </div>
           <div class="ayat-actions">
-            <button class="ayat-btn" onclick="playSingleAya(${sura.sura_index}, ${v.aya})">🔊 তিলাওয়াত</button>
-            <button class="ayat-btn" onclick="toggleTafsir(${v.aya})">📖 তাফসীর</button>
-            <button class="ayat-btn" onclick="copyAyatText(${sura.sura_index}, ${v.aya})">📋 কপি</button>
+            <button class="ayat-btn" onclick="playSingleAya(${sura.sura_index}, ${v.aya})">${ICONS.speaker} তিলাওয়াত</button>
+            <button class="ayat-btn" onclick="toggleTafsir(${v.aya})">${ICONS.book} তাফসীর</button>
+            <button class="ayat-btn" onclick="copyAyatText(${sura.sura_index}, ${v.aya})">${ICONS.copy} কপি</button>
           </div>
         </div>
 
@@ -406,7 +483,7 @@ function renderReaderView() {
         <div class="tafsir-box" id="tafsir-${v.aya}">
           <div class="tafsir-header">
             <span>খাযাইনুল ইরফান তাফসীর</span>
-            <button class="ayat-btn" onclick="copyFullTafsir(${sura.sura_index}, ${v.aya})">তাফসীর কপি</button>
+            <button class="ayat-btn" onclick="copyFullTafsir(${sura.sura_index}, ${v.aya})">${ICONS.copy} তাফসীর কপি</button>
           </div>
           ${v.asb_bn ? `<div class="tafsir-shaan"><strong>শানে নুযূল:</strong> ${v.asb_bn}</div>` : ''}
           <div style="white-space:pre-line;">${v.tf_bn || 'এই আয়াতের জন্য আলাদা তাফসীর নোট নেই।'}</div>
@@ -436,8 +513,10 @@ function renderMushafView() {
     <div class="reader-header">
       <div class="reader-title-ar">${sura.name_ar}</div>
       <div class="reader-title-bn">সূরা ${sura.name_bn} (মুসহাফ পাঠ)</div>
-      <div style="font-size:13px; color:var(--text-muted); margin-bottom:10px;">মোট আয়াত: ${toBnNum(sura.total_ayats)}</div>
-      <button class="ayat-btn" onclick="playSurahAudio(${sura.sura_index}, ${sura.total_ayats})">▶️ পূর্ণ সূরা তিলাওয়াত শুনুন</button>
+      <div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">মোট আয়াত: ${toBnNum(sura.total_ayats)}</div>
+      <button class="ayat-btn" onclick="playSurahAudio(${sura.sura_index}, ${sura.total_ayats})" style="font-size:14px; padding:8px 16px;">
+        ${ICONS.play} পূর্ণ সূরা তিলাওয়াত শুনুন
+      </button>
     </div>
     <div class="mushaf-container">
       ${bismillahHtml}
@@ -446,13 +525,13 @@ function renderMushafView() {
   `;
 }
 
-// Toggle Tafsir accordion
+// Toggle Tafsir
 function toggleTafsir(aya) {
   const el = document.getElementById(`tafsir-${aya}`);
   if (el) el.classList.toggle('open');
 }
 
-// Copy single verse text
+// Copy single Ayat text
 function copyAyatText(suraIndex, aya) {
   const v = State.currentSurah.verses.find(item => item.aya === aya);
   if (!v) return;
@@ -473,7 +552,7 @@ function copyFullTafsir(suraIndex, aya) {
   navigator.clipboard.writeText(text).then(() => showToast('সম্পূর্ণ তাফসীর কপি হয়েছে!'));
 }
 
-// Audio Engine (EveryAyah Alafasy)
+// Audio Engine (Alafasy 128kbps)
 function setupAudioListeners() {
   State.audio.addEventListener('ended', () => {
     if (State.playingAya < State.currentSurah.verses.length) {
@@ -504,7 +583,6 @@ function playSingleAya(sura, aya) {
 
   updateAudioBar();
 
-  // Highlight card and scroll
   document.querySelectorAll('.ayat-card').forEach(c => c.classList.remove('playing'));
   const card = document.getElementById(`ayat-${aya}`);
   if (card) {
@@ -557,10 +635,12 @@ function updateAudioBar() {
 
   document.getElementById('audioTitle').textContent = `সূরা ${suraName}`;
   document.getElementById('audioMeta').textContent = `আয়াত: ${toBnNum(State.playingAya)} (কারী মিশারি রাশিদ)`;
-  document.getElementById('btnPlayPause').textContent = State.isPlaying ? '⏸' : '▶';
+
+  const playPauseBtn = document.getElementById('btnPlayPause');
+  playPauseBtn.innerHTML = State.isPlaying ? ICONS.pause : ICONS.play;
 }
 
-// Search Modal Handlers
+// Global Search Modal Handlers
 function openSearch() {
   document.getElementById('modalSearch').classList.add('open');
   document.getElementById('searchInput').focus();
@@ -572,7 +652,7 @@ function closeSearch() {
   document.getElementById('searchResults').innerHTML = '';
 }
 
-function handleSearch(e) {
+function handleGlobalSearch(e) {
   const q = e.target.value.trim().toLowerCase();
   const resultsContainer = document.getElementById('searchResults');
   if (!q) {
