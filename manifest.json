@@ -1,0 +1,28 @@
+{
+  "name": "কানযুল ঈমান কুরআন ও তাফসীর",
+  "short_name": "Kanzul Iman",
+  "description": "পবিত্র কুরআনুল কারীম তিলাওয়াত, কানযুল ঈমান বাংলা ও উর্দু অনুবাদ এবং খাযাইনুল ইরফান তাফসীর।",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#14161D",
+  "theme_color": "#BA8316",
+  "lang": "bn",
+  "dir": "ltr",
+  "categories": ["books", "education", "reference"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

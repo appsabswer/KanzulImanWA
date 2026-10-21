@@ -1,0 +1,717 @@
+/* ========================================================
+   Kanzul Iman Quran & Tafsir - Progressive Web App (PWA)
+   Color Palette: Royal Deep Gold (#BA8316)
+   ======================================================== */
+
+@font-face {
+  font-family: 'kona';
+  src: url('../fonts/kona.ttf') format('truetype');
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'kohinoor';
+  src: url('../fonts/kohinoor.otf') format('opentype');
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'pdms_saleem';
+  src: url('../fonts/pdms_saleem_quran.ttf') format('truetype');
+  font-weight: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'urdu_font';
+  src: url('../fonts/urdu.ttf') format('truetype');
+  font-weight: normal;
+  font-display: swap;
+}
+
+:root {
+  --primary-gold: #BA8316;
+  --primary-gold-dark: #996B0E;
+  --primary-gold-light: #C99522;
+  --gold-tint: rgba(186, 131, 22, 0.12);
+  --gold-glow: rgba(186, 131, 22, 0.25);
+  
+  --bg-color: #14161D;
+  --surface-color: #1B1E27;
+  --card-bg: #222632;
+  --card-border: rgba(186, 131, 22, 0.22);
+  --text-main: #F3F4F6;
+  --text-muted: #9CA3AF;
+  --badge-bg: rgba(186, 131, 22, 0.15);
+
+  --arabic-size: 28px;
+  --trans-size: 16px;
+  --tafsir-size: 15px;
+  --font-bengali: 'kona', 'kohinoor', sans-serif;
+  --font-arabic: 'pdms_saleem', serif;
+  --font-urdu: 'urdu_font', serif;
+}
+
+/* Theme: Light */
+body.theme-light {
+  --bg-color: #F8F9FA;
+  --surface-color: #FFFFFF;
+  --card-bg: #FFFFFF;
+  --card-border: rgba(186, 131, 22, 0.28);
+  --text-main: #1A1D20;
+  --text-muted: #555B66;
+  --badge-bg: rgba(186, 131, 22, 0.12);
+  --gold-tint: rgba(186, 131, 22, 0.08);
+}
+
+/* Theme: Sepia (Parchment) */
+body.theme-sepia {
+  --bg-color: #F5EFEB;
+  --surface-color: #EFE8E2;
+  --card-bg: #FAF6F2;
+  --card-border: rgba(186, 131, 22, 0.35);
+  --text-main: #2C2623;
+  --text-muted: #6A615B;
+  --badge-bg: rgba(186, 131, 22, 0.18);
+  --gold-tint: rgba(186, 131, 22, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: var(--font-bengali);
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* App Container */
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-top: calc(env(safe-area-inset-top) + 64px);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 80px);
+}
+
+/* Header */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(env(safe-area-inset-top) + 64px);
+  padding-top: env(safe-area-inset-top);
+  background: var(--surface-color);
+  border-bottom: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 16px;
+  padding-right: 16px;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  border: 1px solid var(--primary-gold);
+}
+
+.brand-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-gold);
+  line-height: 1.2;
+}
+
+.brand-subtitle {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-icon {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-main);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 18px;
+}
+
+.btn-icon:hover, .btn-icon.active {
+  background: var(--primary-gold);
+  color: #FFFFFF;
+  border-color: var(--primary-gold);
+}
+
+/* Navigation Tabs */
+.nav-tabs {
+  display: flex;
+  background: var(--surface-color);
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--card-border);
+  gap: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-tab {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-tab.active {
+  background: var(--gold-tint);
+  color: var(--primary-gold);
+  border-color: var(--primary-gold);
+}
+
+/* Main Content Area */
+.main-container {
+  flex: 1;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Surah List Grid */
+.surah-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.surah-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.surah-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary-gold);
+  box-shadow: 0 4px 14px var(--gold-glow);
+}
+
+.surah-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--badge-bg);
+  color: var(--primary-gold);
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--primary-gold);
+}
+
+.surah-info {
+  flex: 1;
+  margin-left: 12px;
+}
+
+.surah-name-bn {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.surah-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.surah-name-ar {
+  font-family: var(--font-arabic);
+  font-size: 20px;
+  color: var(--primary-gold);
+  direction: rtl;
+}
+
+/* Quran Reader View */
+.reader-header {
+  background: var(--surface-color);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+}
+
+.reader-title-ar {
+  font-family: var(--font-arabic);
+  font-size: 32px;
+  color: var(--primary-gold);
+  margin-bottom: 6px;
+  direction: rtl;
+}
+
+.reader-title-bn {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.reader-bismillah {
+  font-family: var(--font-arabic);
+  font-size: 26px;
+  color: var(--primary-gold-dark);
+  margin-top: 10px;
+  direction: rtl;
+}
+
+/* Ayat Card */
+.ayat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.ayat-card.playing {
+  border-color: var(--primary-gold);
+  background-color: var(--gold-tint);
+  box-shadow: 0 0 15px var(--gold-glow);
+}
+
+.ayat-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--card-border);
+}
+
+.ayat-badge {
+  background: var(--badge-bg);
+  color: var(--primary-gold);
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid var(--primary-gold);
+}
+
+.ayat-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ayat-btn {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+
+.ayat-btn:hover {
+  background: var(--primary-gold);
+  color: #FFFFFF;
+  border-color: var(--primary-gold);
+}
+
+.ayat-arabic {
+  font-family: var(--font-arabic);
+  font-size: var(--arabic-size);
+  line-height: 2.2;
+  text-align: right;
+  direction: rtl;
+  margin-bottom: 16px;
+  color: var(--text-main);
+  padding: 4px 0;
+}
+
+.ayat-trans-bn {
+  font-size: var(--trans-size);
+  color: var(--text-main);
+  margin-bottom: 10px;
+  line-height: 1.8;
+  font-weight: 500;
+}
+
+.ayat-trans-ur {
+  font-family: var(--font-urdu);
+  font-size: calc(var(--trans-size) + 4px);
+  color: var(--text-main);
+  direction: rtl;
+  text-align: right;
+  margin-bottom: 10px;
+  line-height: 2.0;
+}
+
+.ayat-trans-en {
+  font-size: calc(var(--trans-size) - 1px);
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+/* Tafsir Box */
+.tafsir-box {
+  margin-top: 12px;
+  background: var(--gold-tint);
+  border-left: 3px solid var(--primary-gold);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: var(--tafsir-size);
+  line-height: 1.8;
+  display: none;
+}
+
+.tafsir-box.open {
+  display: block;
+}
+
+.tafsir-header {
+  font-weight: 700;
+  color: var(--primary-gold);
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tafsir-shaan {
+  background: rgba(0,0,0,0.15);
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--primary-gold-dark);
+}
+
+/* Mushaf Continuous View */
+.mushaf-container {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 24px;
+  line-height: 2.6;
+  text-align: justify;
+  direction: rtl;
+  font-family: var(--font-arabic);
+  font-size: var(--arabic-size);
+}
+
+.mushaf-aya-end {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--primary-gold);
+  color: var(--primary-gold);
+  font-size: 14px;
+  margin: 0 4px;
+  vertical-align: middle;
+  background: var(--badge-bg);
+}
+
+/* Tajweed Colors */
+.tajweed-ghunna { color: #FF7F00; font-weight: bold; }
+.tajweed-ikhfa { color: #29B6F6; font-weight: bold; }
+.tajweed-qalqalah { color: #4CAF50; font-weight: bold; }
+.tajweed-iqlab { color: #AB47BC; font-weight: bold; }
+.tajweed-madd { color: #EC407A; font-weight: bold; }
+
+/* Audio Player Bar */
+.audio-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(env(safe-area-inset-bottom) + 68px);
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--surface-color);
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 16px;
+  padding-right: 16px;
+  z-index: 100;
+  box-shadow: 0 -3px 12px rgba(0,0,0,0.25);
+  display: none;
+}
+
+.audio-bar.active {
+  display: flex;
+}
+
+.audio-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.audio-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-gold);
+}
+
+.audio-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.audio-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-play {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--primary-gold);
+  color: #FFFFFF;
+  border: none;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px var(--gold-glow);
+}
+
+/* Settings Drawer */
+.drawer-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.drawer-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.settings-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 340px;
+  max-width: 85vw;
+  background: var(--surface-color);
+  z-index: 210;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 20px;
+  overflow-y: auto;
+  box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+}
+
+.settings-drawer.open {
+  transform: translateX(0);
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.drawer-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-gold);
+}
+
+.setting-group {
+  margin-bottom: 20px;
+}
+
+.setting-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.setting-slider {
+  width: 100%;
+  accent-color: var(--primary-gold);
+}
+
+.theme-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.theme-btn {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
+
+.theme-btn.active {
+  border-color: var(--primary-gold);
+  background: var(--gold-tint);
+  color: var(--primary-gold);
+}
+
+/* Toast Snackbar */
+.toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(50px);
+  background: #1A1D20;
+  color: #FFFFFF;
+  border: 1px solid var(--primary-gold);
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 300;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  pointer-events: none;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* Modal Search */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 250;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 80px;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--surface-color);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  width: 90%;
+  max-width: 500px;
+  padding: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--primary-gold);
+  background: var(--card-bg);
+  color: var(--text-main);
+  font-size: 16px;
+  outline: none;
+}
+
+.search-results {
+  max-height: 350px;
+  overflow-y: auto;
+  margin-top: 12px;
+}
+
+.search-item {
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.search-item:hover {
+  background: var(--gold-tint);
+}

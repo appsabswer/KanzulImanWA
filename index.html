@@ -1,1 +1,175 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>কানযুল ঈমান কুরআন ও তাফসীর | Kanzul Iman Quran & Tafsir</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#BA8316">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Kanzul Iman">
+  <meta name="description" content="পবিত্র কুরআনুল কারীম তিলাওয়াত, কানযুল ঈমান বাংলা ও উর্দু অনুবাদ এবং খাযাইনুল ইরফান তাফসীর।">
 
+  <!-- Favicon & Icons -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="theme-dark">
+
+  <div id="app">
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <img src="icons/icon-192.png" alt="Logo" class="brand-icon">
+        <div>
+          <div class="brand-title">কানযুল ঈমান</div>
+          <div class="brand-subtitle">কুরআন ও খাযাইনুল ইরফান তাফসীর</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-icon" id="btnSearch" title="অনুসন্ধান (Ctrl+F)">🔍</button>
+        <button class="btn-icon" id="btnTajweed" title="তাজবীদ কালার">🎨</button>
+        <button class="btn-icon" id="btnMushaf" title="মুসহাফ পাঠ">📖</button>
+        <button class="btn-icon" id="btnSettings" title="সেটিংস">⚙️</button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-target="surah">সূরা তালিকা (১১৪)</button>
+      <button class="nav-tab" data-target="para">পারা তালিকা (৩০)</button>
+      <button class="nav-tab" data-target="reader">কুরআন রিডার</button>
+      <button class="nav-tab" data-target="sajdah">সিজদাহ্ ও হুকুম (১৪)</button>
+      <button class="nav-tab" data-target="about">প্রবন্ধ ও তথ্যসূত্র</button>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="main-container">
+      <!-- 1. Surah List View -->
+      <section id="viewSurahList">
+        <div class="surah-grid" id="surahGrid"></div>
+      </section>
+
+      <!-- 2. Para List View -->
+      <section id="viewParaList" style="display:none;">
+        <div class="surah-grid" id="paraGrid"></div>
+      </section>
+
+      <!-- 3. Reader View -->
+      <section id="viewReader" style="display:none;">
+        <div id="readerContent"></div>
+      </section>
+
+      <!-- 4. Sajdah View -->
+      <section id="viewSajdah" style="display:none;">
+        <div id="sajdahList"></div>
+      </section>
+
+      <!-- 5. About Articles View -->
+      <section id="viewAbout" style="display:none;">
+        <div id="aboutList"></div>
+      </section>
+    </main>
+
+    <!-- Bottom Audio Player Bar -->
+    <div class="audio-bar" id="audioBar">
+      <div class="audio-info">
+        <span class="audio-title" id="audioTitle">সূরা তিলাওয়াত</span>
+        <span class="audio-meta" id="audioMeta">কারী মিশারি রাশিদ আল-আফাসী</span>
+      </div>
+      <div class="audio-controls">
+        <button class="ayat-btn" id="btnPrevAya">⏮</button>
+        <button class="btn-play" id="btnPlayPause">▶</button>
+        <button class="ayat-btn" id="btnNextAya">⏭</button>
+        <button class="ayat-btn" id="btnStopAudio" style="color:#E91E63;">⏹</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Slide-in Drawer -->
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="settings-drawer" id="settingsDrawer">
+    <div class="drawer-header">
+      <div class="drawer-title">⚙️ সেটিংস ও পছন্দসমূহ</div>
+      <button class="btn-icon" id="btnCloseDrawer">✕</button>
+    </div>
+
+    <!-- Theme Selection -->
+    <div class="setting-group">
+      <div class="setting-label"><span>থিম নির্বাচন</span></div>
+      <div class="theme-options">
+        <button class="theme-btn active" data-theme="dark">ডার্ক</button>
+        <button class="theme-btn" data-theme="light">লাইট</button>
+        <button class="theme-btn" data-theme="sepia">সেপিয়া</button>
+      </div>
+    </div>
+
+    <!-- Font Size Controls -->
+    <div class="setting-group">
+      <div class="setting-label">
+        <span>আরবি ফন্ট সাইজ</span>
+        <span id="lblArabicSize">28px</span>
+      </div>
+      <input type="range" min="20" max="44" value="28" class="setting-slider" id="sliderArabic">
+    </div>
+
+    <div class="setting-group">
+      <div class="setting-label">
+        <span>অনুবাদ ফন্ট সাইজ</span>
+        <span id="lblTransSize">16px</span>
+      </div>
+      <input type="range" min="12" max="26" value="16" class="setting-slider" id="sliderTrans">
+    </div>
+
+    <div class="setting-group">
+      <div class="setting-label">
+        <span>তাফসীর ফন্ট সাইজ</span>
+        <span id="lblTafsirSize">15px</span>
+      </div>
+      <input type="range" min="12" max="24" value="15" class="setting-slider" id="sliderTafsir">
+    </div>
+
+    <!-- Translation Toggles -->
+    <div class="setting-group" style="border-top:1px solid var(--card-border); padding-top:16px;">
+      <div class="setting-label"><span>অনুবাদ প্রদর্শন</span></div>
+      <label style="display:flex; align-items:center; gap:8px; margin-bottom:8px; cursor:pointer;">
+        <input type="checkbox" id="chkBn" checked style="accent-color:var(--primary-gold);">
+        <span>বাংলা কানযুল ঈমান (মুফতী আবদুল মান্নান)</span>
+      </label>
+      <label style="display:flex; align-items:center; gap:8px; margin-bottom:8px; cursor:pointer;">
+        <input type="checkbox" id="chkUr" checked style="accent-color:var(--primary-gold);">
+        <span>উর্দু কানযুল ঈমান (ইমাম আহমদ রেজা খান)</span>
+      </label>
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+        <input type="checkbox" id="chkEn" style="accent-color:var(--primary-gold);">
+        <span>ইংরেজি অনুবাদ (Sahih International)</span>
+      </label>
+    </div>
+
+    <div style="margin-top:30px; font-size:12px; color:var(--text-muted); text-align:center;">
+      কানযুল ঈমান কুরআন ও তাফসীর v1.0.0 (PWA)<br>
+      © 2026 Mohammad Norul Abswer
+    </div>
+  </aside>
+
+  <!-- Global Search Modal -->
+  <div class="modal-overlay" id="modalSearch">
+    <div class="modal-content">
+      <input type="text" class="search-input" id="searchInput" placeholder="সূরা বা পারার নাম খুঁজুন (যেমন: ইয়াসীন, রহমান, ১১৪)...">
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <!-- App Script -->
+  <script src="js/app.js"></script>
+</body>
+</html>
