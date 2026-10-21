@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kanzuliman-pwa-v1';
+const CACHE_NAME = 'kanzuliman-pwa-v2';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -9,9 +9,15 @@ const CORE_ASSETS = [
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/apple-touch-icon.png',
+  './icons/ic_mecca.webp',
+  './icons/ic_medina.webp',
   './fonts/kona.ttf',
+  './fonts/kona_bold.ttf',
   './fonts/kohinoor.otf',
+  './fonts/kohinoor_bold.otf',
   './fonts/pdms_saleem_quran.ttf',
+  './fonts/alqalam_quran_majeed.ttf',
+  './fonts/noto_nastaliq_urdu.ttf',
   './fonts/urdu.ttf',
   './data/suras.json',
   './data/paras.json',

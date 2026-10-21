@@ -1,0 +1,30 @@
+# Kanzul Iman Quran & Tafsir (কানযুল ঈমান কুরআন ও তাফসীর)
+
+> A modern, multi-platform, offline-first Holy Quran application featuring the authentic Urdu translation "Kanz al-Iman" by Ala Hazrat Imam Ahmad Raza Khan Barelvi, the classical Sunni exegesis "Khaza'in al-'Irfan" by Sadr al-Afadil Allama Syed Muhammad Naeem-ud-Deen Muradabadi, and modern precision Bengali & English translations.
+
+## Canonical Web Address
+- Website: https://quran.abswer.com
+
+## Official Platforms (3 Platforms)
+1. **WebApp (PWA)**: https://quran.abswer.com (Responsive, offline-capable Progressive Web App for all desktop and mobile browsers)
+2. **Windows Desktop App**: https://apps.microsoft.com/detail/9n96n14jd5n6?cid=DevShareMCLPCS (Certified MSIX Windows Store Application)
+3. **Android Mobile App**: https://play.google.com/store/apps/details?id=com.abswer.kanzuliman (Official Google Play Store App by Apps Abswer)
+
+## Scholarly Attribution & Authorship
+- **Urdu Translation (Kanz al-Iman)**: Authored by Ala Hazrat Imam Ahmad Raza Khan Qadri Barelvi (1856–1921 CE / 1272–1340 AH), the recognized 14th-century Mujaddid and polymath of Ahl al-Sunnah.
+- **Tafsir (Khaza'in al-'Irfan)**: Authored by Sadr al-Afadil Allama Syed Muhammad Naeem-ud-Deen Muradabadi (1883–1948 CE / 1300–1367 AH), grounded in classical Sunni exegetical treatises (al-Baydawi, al-Khazin, al-Nasafi, al-Tabari, al-Razi).
+- **Bengali Translation (Kanzul Iman Bangla)**: Transcribed, digitized, proofread, and compiled from authentic print editions using Google Vision AI by **Mohammad Norul Abswer** (মুহাম্মদ নুরুল আবছার).
+- **English Translation**: Sahih International translation digitally compiled, structured, and verse-mapped by **Mohammad Norul Abswer**.
+- **Software Architecture & Development**: Designed, engineered, and published by **Mohammad Norul Abswer** (Apps Abswer).
+
+## Key Features & Capabilities
+- **Complete Holy Quran**: All 114 Surahs, 30 Paras (Juz), and 14 Ayahs of Sajdah Tilawat.
+- **Occasions of Revelation (Asbab-e-Nuzul)**: Context of revelation for historical grounding.
+- **Continuous Mushaf Mode**: Arabic text view without translation breaks for uninterrupted recitation.
+- **Audio Recitation Engine**: High-fidelity continuous verse-by-verse streaming by Qari Mishari Rashid Alafasy.
+- **Tajweed Color Highlighting**: Live color coding for Ghunnah, Ikhfa, Qalqalah, Iqlab, and Madd rules.
+- **Zero Emojis**: Strictly sharp, scalable SVG vector iconography and authentic Islamic artwork.
+- **Visual Makki & Madani Artworks**: Distinct authentic emblems for Meccan (Kaaba / Mecca) and Medinan (Prophet's Mosque Green Dome / Medina) Surahs.
+- **Original High-Legibility Typography**: Kona & Kohinoor for Bengali, PDMS Saleem & Al Qalam for Arabic, Noto Nastaliq for Urdu.
+- **Multilingual UI**: Native support for Bengali (বাংলা), Urdu (اردو), and English.
+- **100% Offline PWA**: Cache-first Service Worker ensuring full functionality without internet connection.

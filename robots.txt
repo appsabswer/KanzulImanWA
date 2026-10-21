@@ -1,0 +1,41 @@
+# robots.txt for Kanzul Iman Quran & Tafsir
+# https://quran.abswer.com
+
+User-agent: *
+Allow: /
+Disallow: /scratch/
+
+# Google Search & Gemini AI
+User-agent: Googlebot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+# OpenAI ChatGPT & SearchBot
+User-agent: GPTBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+
+# Anthropic Claude
+User-agent: ClaudeBot
+Allow: /
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Microsoft Bing & Copilot
+User-agent: Bingbot
+Allow: /
+
+# Apple Search
+User-agent: Applebot
+Allow: /
+
+# Sitemap Index
+Sitemap: https://quran.abswer.com/sitemap.xml

@@ -220,14 +220,95 @@ html, body {
   transform: translateY(-1px);
 }
 
+.store-badge-btn.active {
+  border-color: var(--primary-gold);
+  background: var(--gold-tint);
+}
+
 .badge-icon {
   width: 18px;
   height: 18px;
   flex-shrink: 0;
 }
 
+.web-badge .badge-icon { color: var(--primary-gold); }
 .win-badge .badge-icon { color: #00ADEF; }
 .play-badge .badge-icon { color: #00E676; }
+
+/* Language Switcher Pill in Top Bar */
+.lang-selector-group {
+  display: flex;
+  align-items: center;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.lang-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1.2;
+}
+
+.lang-btn:hover {
+  color: var(--primary-gold);
+}
+
+.lang-btn.active {
+  background: var(--primary-gold);
+  color: #1a160d;
+}
+
+.lang-setting-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lang-setting-btn:hover {
+  border-color: var(--primary-gold);
+  color: var(--text-main);
+}
+
+.lang-setting-btn.active {
+  background: var(--primary-gold);
+  border-color: var(--primary-gold);
+  color: #1a160d;
+  font-weight: 700;
+}
+
+/* Urdu Typography Mode */
+body.lang-ur {
+  font-family: var(--font-urdu);
+}
+body.lang-ur .brand-title,
+body.lang-ur .brand-subtitle,
+body.lang-ur .surah-name-local,
+body.lang-ur .drawer-title,
+body.lang-ur .setting-label {
+  font-family: var(--font-urdu);
+}
+body.lang-ur .ayat-trans-ur {
+  font-size: calc(var(--trans-size) * 1.05);
+  line-height: 1.9;
+}
 
 .badge-text {
   display: flex;
@@ -583,16 +664,133 @@ html, body {
   font-style: italic;
 }
 
-/* Tafsir Accordion */
+/* Surah Header Card with Makki / Madani Artwork */
+.surah-header-card {
+  background: linear-gradient(135deg, var(--card-bg) 0%, var(--gold-tint) 100%);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+.surah-header-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--primary-gold);
+}
+
+.surah-header-info {
+  flex: 1;
+}
+
+.reader-title-ar {
+  font-family: var(--font-arabic);
+  font-size: calc(var(--arabic-size) * 1.25);
+  color: var(--primary-gold);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.reader-title-local {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.surah-meaning {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.reader-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+
+.surah-header-artwork {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.surah-artwork-img {
+  width: 86px;
+  height: 86px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.28));
+  transition: transform 0.3s ease;
+}
+
+.surah-artwork-img:hover {
+  transform: scale(1.06);
+}
+
+/* Makki & Madani Pills and List Icons */
+.type-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.makki-pill {
+  background: rgba(186, 131, 22, 0.16);
+  border: 1px solid rgba(186, 131, 22, 0.35);
+  color: var(--primary-gold);
+}
+
+.madani-pill {
+  background: rgba(1, 135, 95, 0.16);
+  border: 1px solid rgba(1, 135, 95, 0.35);
+  color: #10B981;
+}
+
+.list-type-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+/* Tafsir Accordion & Structured Formatter */
 .tafsir-box {
-  margin-top: 12px;
+  margin-top: 14px;
   background: var(--gold-tint);
-  border-left: 3px solid var(--primary-gold);
-  border-radius: 8px;
-  padding: 14px 16px;
+  border: 1px solid rgba(186, 131, 22, 0.25);
+  border-left: 4px solid var(--primary-gold);
+  border-radius: 10px;
+  padding: 16px 18px;
   font-size: var(--tafsir-size);
-  line-height: 1.8;
+  line-height: 1.85;
   display: none;
+  animation: fadeInTafsir 0.2s ease-out;
+}
+
+@keyframes fadeInTafsir {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .tafsir-box.open {
@@ -602,19 +800,136 @@ html, body {
 .tafsir-header {
   font-weight: 700;
   color: var(--primary-gold);
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid rgba(186, 131, 22, 0.2);
+  padding-bottom: 8px;
 }
 
 .tafsir-shaan {
-  background: rgba(0,0,0,0.15);
-  padding: 8px 12px;
+  background: rgba(186, 131, 22, 0.12);
+  border: 1px solid rgba(186, 131, 22, 0.25);
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: calc(var(--tafsir-size) - 1px);
+  color: var(--text-main);
+  line-height: 1.7;
+}
+
+.tafsir-shaan strong {
+  color: var(--primary-gold);
+}
+
+/* Tafsir Preamble / Introduction Box */
+.tafsir-preamble {
+  background: rgba(186, 131, 22, 0.08);
+  border: 1px solid rgba(186, 131, 22, 0.25);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+
+.tafsir-preamble-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--primary-gold);
+  margin-bottom: 6px;
+  font-size: calc(var(--tafsir-size) * 0.98);
+}
+
+.tafsir-preamble-body {
+  font-size: var(--tafsir-size);
+  color: var(--text-main);
+  line-height: 1.8;
+  text-align: justify;
+}
+
+/* Tafsir Note Card (টীকা কার্ডসমূহ) */
+.tafsir-note-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.tafsir-note-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.tafsir-note-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--primary-gold);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 3px 9px;
   border-radius: 6px;
-  margin-bottom: 10px;
-  font-size: 13px;
-  color: var(--primary-gold-dark);
+  line-height: 1.2;
+}
+
+.tafsir-note-topic {
+  font-weight: 700;
+  color: var(--primary-gold);
+  font-size: calc(var(--tafsir-size) * 1.02);
+}
+
+/* Quoted Quranic Verse in Tafsir (Centered Box) */
+.tafsir-quran-quote {
+  background: rgba(186, 131, 22, 0.1);
+  border: 1px solid rgba(186, 131, 22, 0.3);
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin: 8px 0 10px;
+  text-align: center;
+  direction: rtl;
+}
+
+.tafsir-quote-ar {
+  font-family: var(--font-arabic);
+  font-size: calc(var(--tafsir-size) * 1.35);
+  font-weight: 700;
+  color: var(--primary-gold);
+  line-height: 1.6;
+}
+
+/* Inline Arabic in Tafsir Body (Hadith quotes, verse parts) */
+.tafsir-inline-ar {
+  font-family: var(--font-arabic);
+  font-size: calc(var(--tafsir-size) * 1.15);
+  color: var(--primary-gold-dark, #d69818);
+  font-weight: 600;
+  padding: 0 4px;
+  direction: rtl;
+  display: inline-block;
+  line-height: 1.5;
+}
+
+/* Inline Reference Tag [ ... ] */
+.tafsir-inline-ref {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 0 2px;
+}
+
+.tafsir-note-body {
+  font-size: var(--tafsir-size);
+  color: var(--text-main);
+  line-height: 1.82;
+  text-align: justify;
 }
 
 /* Mushaf View */
@@ -752,13 +1067,23 @@ html, body {
   justify-content: center;
 }
 
-.play-btn {
-  background: #01875F;
-  color: #FFFFFF;
+.web-btn {
+  background: var(--primary-gold);
+  color: #1a160d;
+}
+
+.web-btn:hover {
+  background: var(--primary-gold-dark);
+  color: #ffffff;
 }
 
 .win-btn {
   background: #0078D4;
+  color: #FFFFFF;
+}
+
+.play-btn {
+  background: #01875F;
   color: #FFFFFF;
 }
 
