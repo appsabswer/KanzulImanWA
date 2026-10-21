@@ -14,7 +14,7 @@
 - **Urdu Translation (Kanz al-Iman)**: Authored by Ala Hazrat Imam Ahmad Raza Khan Qadri Barelvi (1856–1921 CE / 1272–1340 AH), the recognized 14th-century Mujaddid and polymath of Ahl al-Sunnah.
 - **Tafsir (Khaza'in al-'Irfan)**: Authored by Sadr al-Afadil Allama Syed Muhammad Naeem-ud-Deen Muradabadi (1883–1948 CE / 1300–1367 AH), grounded in classical Sunni exegetical treatises (al-Baydawi, al-Khazin, al-Nasafi, al-Tabari, al-Razi).
 - **Bengali Translation (Kanzul Iman Bangla)**: Transcribed, digitized, proofread, and compiled from authentic print editions using Google Vision AI by **Mohammad Norul Abswer** (মুহাম্মদ নুরুল আবছার).
-- **English Translation**: Sahih International translation digitally compiled, structured, and verse-mapped by **Mohammad Norul Abswer**.
+- **English Translation**: Digitally compiled, structured, verified, and verse-mapped by **Mohammad Norul Abswer**.
 - **Software Architecture & Development**: Designed, engineered, and published by **Mohammad Norul Abswer** (Apps Abswer).
 
 ## Key Features & Capabilities

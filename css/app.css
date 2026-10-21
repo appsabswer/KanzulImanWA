@@ -127,18 +127,26 @@ body.theme-sepia {
 html, body {
   width: 100%;
   height: 100%;
+  height: 100dvh;
   background-color: var(--bg-color);
   color: var(--text-main);
   font-family: var(--font-bengali);
   line-height: 1.6;
   overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 #app {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
+  height: 100dvh;
+  width: 100%;
   width: 100vw;
   overflow: hidden;
 }
@@ -743,6 +751,39 @@ body.lang-ur .ayat-trans-ur {
   transform: scale(1.06);
 }
 
+/* Surah Quick Actions Pill Bar */
+.surah-quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.surah-action-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text-main);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  line-height: 1.2;
+}
+
+.surah-action-pill:hover,
+.surah-action-pill.active {
+  border-color: var(--primary-gold);
+  background: var(--gold-tint);
+  color: var(--primary-gold);
+}
+
 /* Makki & Madani Pills and List Icons */
 .type-pill {
   display: inline-flex;
@@ -1340,11 +1381,11 @@ body.lang-ur .ayat-trans-ur {
 @media (max-width: 1023px) {
   /* Mobile Android App Experience */
   .store-badges-container {
-    display: none;
+    display: none !important;
   }
 
   .mobile-store-promo {
-    display: block;
+    display: none !important;
   }
 
   .mobile-bottom-nav {
@@ -1353,8 +1394,81 @@ body.lang-ur .ayat-trans-ur {
 
   .workspace-layout {
     height: calc(100vh - 64px - 56px);
+    height: calc(100dvh - 56px - 56px);
   }
 
+  /* Audio Bar Docked Above Bottom Nav */
+  .audio-bar {
+    bottom: calc(56px + env(safe-area-inset-bottom)) !important;
+    height: 54px !important;
+    padding: 0 14px !important;
+    z-index: 110 !important;
+    box-shadow: 0 -3px 14px rgba(0,0,0,0.35) !important;
+  }
+
+  .audio-info {
+    flex: 1;
+    min-width: 0;
+    margin-right: 8px;
+  }
+
+  .audio-title {
+    font-size: 13px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .audio-meta {
+    font-size: 11px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .audio-controls {
+    gap: 6px !important;
+    flex-shrink: 0;
+  }
+
+  .audio-controls .ayat-btn {
+    padding: 4px 6px !important;
+    width: 32px !important;
+    height: 32px !important;
+    justify-content: center;
+  }
+
+  .audio-controls .btn-play {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 16px !important;
+  }
+
+  /* Reading Pane Bottom Scroll Clearances */
+  .reading-pane {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom)) !important;
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+  }
+
+  .sidebar-list-container {
+    padding-bottom: calc(70px + env(safe-area-inset-bottom)) !important;
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+  }
+
+  /* When Audio is Active: Extra bottom clearance */
+  body.audio-playing .reading-pane {
+    padding-bottom: calc(130px + env(safe-area-inset-bottom)) !important;
+  }
+
+  body.audio-playing .sidebar-list-container {
+    padding-bottom: calc(125px + env(safe-area-inset-bottom)) !important;
+  }
+
+  /* Single-Pane Switcher: Reader vs List */
   body.mobile-reader-active .sidebar-pane {
     display: none !important;
   }
@@ -1362,7 +1476,14 @@ body.lang-ur .ayat-trans-ur {
   body.mobile-reader-active .reading-pane {
     display: block !important;
     width: 100% !important;
-    padding: 16px;
+  }
+
+  body.mobile-reader-active .brand-icon {
+    display: none !important;
+  }
+
+  body.mobile-reader-active .mobile-back-btn {
+    display: flex !important;
   }
 
   body:not(.mobile-reader-active) .reading-pane {
@@ -1375,7 +1496,253 @@ body.lang-ur .ayat-trans-ur {
     border-right: none;
   }
 
+  body:not(.mobile-reader-active) .mobile-back-btn {
+    display: none !important;
+  }
+}
+
+/* ========================================================
+   Smartphones & Compact Screens (< 600px)
+   ======================================================== */
+@media (max-width: 600px) {
+  .app-header {
+    height: calc(env(safe-area-inset-top) + 56px) !important;
+    padding: env(safe-area-inset-top) 12px 0 12px !important;
+  }
+
+  .header-left {
+    gap: 8px !important;
+    min-width: 0 !important;
+    flex: 1;
+  }
+
+  .brand-icon {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 8px !important;
+    flex-shrink: 0;
+  }
+
+  .brand-title {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 140px !important;
+  }
+
+  body.mobile-reader-active .brand-title {
+    max-width: calc(100vw - 180px) !important;
+    font-size: 15.5px !important;
+  }
+
+  .brand-subtitle {
+    display: none !important;
+  }
+
+  .header-actions {
+    gap: 5px !important;
+    flex-shrink: 0;
+  }
+
+  .lang-selector-group {
+    padding: 2px !important;
+    gap: 1px !important;
+  }
+
+  .lang-btn {
+    padding: 3px 6px !important;
+    font-size: 10.5px !important;
+  }
+
+  .btn-icon {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 8px !important;
+  }
+
+  /* Hide redundant header toggles on phones - accessible in Surah Header Card */
+  #btnTajweed,
+  #btnMushaf {
+    display: none !important;
+  }
+
   .mobile-back-btn {
-    display: flex;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 8px !important;
+    margin-right: 2px !important;
+  }
+
+  /* Workspace */
+  .workspace-layout {
+    height: calc(100dvh - 56px - 56px) !important;
+  }
+
+  .sidebar-tabs {
+    display: none !important; /* Bottom nav handles all tab switching */
+  }
+
+  .sidebar-search-box {
+    padding: 8px 10px !important;
+  }
+
+  .sidebar-search-input {
+    padding: 7px 10px !important;
+    font-size: 12.5px !important;
+  }
+
+  .sidebar-list-item {
+    padding: 10px 12px !important;
+    margin-bottom: 5px !important;
+    border-radius: 9px !important;
+  }
+
+  .item-num {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 12px !important;
+    margin-right: 8px !important;
+  }
+
+  .item-title {
+    font-size: 14.5px !important;
+  }
+
+  .item-sub {
+    font-size: 10.5px !important;
+  }
+
+  .item-ar {
+    font-size: 19px !important;
+  }
+
+  /* Reading Pane */
+  body.mobile-reader-active .reading-pane {
+    padding: 14px 12px calc(76px + env(safe-area-inset-bottom)) 12px !important;
+  }
+
+  body.mobile-reader-active.audio-playing .reading-pane {
+    padding-bottom: calc(130px + env(safe-area-inset-bottom)) !important;
+  }
+
+  /* Surah Header Card */
+  .surah-header-card {
+    padding: 14px 14px !important;
+    margin-bottom: 16px !important;
+    border-radius: 12px !important;
+    gap: 12px !important;
+  }
+
+  .surah-artwork-img {
+    width: 62px !important;
+    height: 62px !important;
+  }
+
+  .reader-title-ar {
+    font-size: 25px !important;
+    line-height: 1.35 !important;
+  }
+
+  .reader-title-local {
+    font-size: 15px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .reader-meta {
+    font-size: 11.5px !important;
+    gap: 6px !important;
+  }
+
+  .surah-action-pill {
+    padding: 5px 9px !important;
+    font-size: 11px !important;
+    gap: 4px !important;
+  }
+
+  /* Ayat Cards */
+  .ayat-card {
+    padding: 12px 12px 10px 12px !important;
+    margin-bottom: 12px !important;
+    border-radius: 10px !important;
+  }
+
+  .ayat-top-bar {
+    margin-bottom: 10px !important;
+    padding-bottom: 8px !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  .ayat-badge {
+    padding: 2px 7px !important;
+    font-size: 11px !important;
+  }
+
+  .ayat-actions {
+    gap: 4px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .ayat-btn {
+    padding: 4px 7px !important;
+    font-size: 11.5px !important;
+    gap: 4px !important;
+  }
+
+  .ayat-arabic {
+    font-size: calc(var(--arabic-size) * 0.92) !important;
+    line-height: 2.05 !important;
+    margin-bottom: 12px !important;
+  }
+
+  .ayat-trans-bn {
+    font-size: calc(var(--trans-size) * 0.94) !important;
+    line-height: 1.7 !important;
+    margin-bottom: 8px !important;
+  }
+
+  .ayat-trans-ur {
+    font-size: calc(var(--trans-size) * 1.05) !important;
+    line-height: 1.9 !important;
+    margin-bottom: 8px !important;
+  }
+
+  .ayat-trans-en {
+    font-size: calc(var(--trans-size) * 0.88) !important;
+    line-height: 1.6 !important;
+    margin-bottom: 8px !important;
+  }
+
+  .tafsir-box {
+    padding: 12px 12px !important;
+    font-size: calc(var(--tafsir-size) * 0.94) !important;
+    line-height: 1.78 !important;
+  }
+
+  .tafsir-quote-ar {
+    font-size: calc(var(--tafsir-size) * 1.2) !important;
+  }
+
+  .mushaf-container {
+    padding: 18px 12px !important;
+    font-size: calc(var(--arabic-size) * 0.88) !important;
+    line-height: 2.3 !important;
+  }
+
+  /* Modals */
+  .modal-overlay {
+    padding-top: 20px !important;
+  }
+
+  .modal-content {
+    width: 94% !important;
+    padding: 14px !important;
+  }
+
+  .settings-drawer {
+    width: 320px !important;
+    padding: 16px !important;
   }
 }

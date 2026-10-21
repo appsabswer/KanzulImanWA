@@ -338,8 +338,15 @@ function setAppLanguage(lang) {
   }
 
   // Update Header & UI texts
-  document.getElementById('topHeaderTitle').textContent = t('appTitle');
-  document.getElementById('topHeaderSubtitle').textContent = t('appSubtitle');
+  if (State.currentSurah && document.body.classList.contains('mobile-reader-active')) {
+    const s = State.currentSurah.sura;
+    const name = lang === 'ur' ? s.name_ur : (lang === 'en' ? s.name_en : s.name_bn);
+    document.getElementById('topHeaderTitle').textContent = `${toLocalizedNum(s.sura_index, lang)}. ${name}`;
+    document.getElementById('topHeaderSubtitle').textContent = s.name_ar;
+  } else {
+    document.getElementById('topHeaderTitle').textContent = t('appTitle');
+    document.getElementById('topHeaderSubtitle').textContent = t('appSubtitle');
+  }
 
   const tabSurahBtn = document.querySelector('.sidebar-tab[data-target="surah"]');
   if (tabSurahBtn) tabSurahBtn.textContent = t('tabSurah');
@@ -349,6 +356,18 @@ function setAppLanguage(lang) {
   if (tabSajdahBtn) tabSajdahBtn.textContent = t('tabSajdah');
   const tabAboutBtn = document.querySelector('.sidebar-tab[data-target="about"]');
   if (tabAboutBtn) tabAboutBtn.textContent = t('tabAbout');
+
+  // Update Mobile Bottom Nav Labels
+  const navSurah = document.querySelector('.bottom-nav-item[data-nav="surah"] .nav-label');
+  if (navSurah) navSurah.textContent = lang === 'ur' ? 'سورتیں' : (lang === 'en' ? 'Surah' : 'সূরা');
+  const navPara = document.querySelector('.bottom-nav-item[data-nav="para"] .nav-label');
+  if (navPara) navPara.textContent = lang === 'ur' ? 'پارے' : (lang === 'en' ? 'Para' : 'পারা');
+  const navSajdah = document.querySelector('.bottom-nav-item[data-nav="sajdah"] .nav-label');
+  if (navSajdah) navSajdah.textContent = lang === 'ur' ? 'سجدے' : (lang === 'en' ? 'Sajdah' : 'সিজদাহ্');
+  const navAbout = document.querySelector('.bottom-nav-item[data-nav="about"] .nav-label');
+  if (navAbout) navAbout.textContent = lang === 'ur' ? 'تعارف' : (lang === 'en' ? 'About' : 'প্রবন্ধ');
+  const navSettings = document.querySelector('.bottom-nav-item[data-nav="settings"] .nav-label');
+  if (navSettings) navSettings.textContent = lang === 'ur' ? 'ترتیبات' : (lang === 'en' ? 'Settings' : 'সেটিংস');
 
   const searchInput = document.getElementById('sidebarSearch');
   if (searchInput) searchInput.placeholder = t('searchPlaceholder');
@@ -422,14 +441,33 @@ async function initApp() {
   setupAudioListeners();
 }
 
+// Mobile Reader Navigation & Back Handler
+function exitMobileReader() {
+  document.body.classList.remove('mobile-reader-active');
+  const btn = document.getElementById('btnMobileBack');
+  if (btn) btn.style.display = 'none';
+  document.getElementById('topHeaderTitle').textContent = t('appTitle');
+  document.getElementById('topHeaderSubtitle').textContent = t('appSubtitle');
+  if (history.state && history.state.reader) {
+    history.back();
+  }
+}
+
+window.addEventListener('popstate', (e) => {
+  if (document.body.classList.contains('mobile-reader-active')) {
+    document.body.classList.remove('mobile-reader-active');
+    const btn = document.getElementById('btnMobileBack');
+    if (btn) btn.style.display = 'none';
+    document.getElementById('topHeaderTitle').textContent = t('appTitle');
+    document.getElementById('topHeaderSubtitle').textContent = t('appSubtitle');
+  }
+});
+
 // Setup Event Listeners
 function setupEventListeners() {
   // Mobile Back Button
   document.getElementById('btnMobileBack').addEventListener('click', () => {
-    document.body.classList.remove('mobile-reader-active');
-    document.getElementById('btnMobileBack').style.display = 'none';
-    document.getElementById('topHeaderTitle').textContent = t('appTitle');
-    document.getElementById('topHeaderSubtitle').textContent = t('appSubtitle');
+    exitMobileReader();
   });
 
   // Language Switcher Buttons (Header & Settings)
@@ -461,8 +499,13 @@ function setupEventListeners() {
       }
 
       // Exit mobile reader mode to show list
-      document.body.classList.remove('mobile-reader-active');
-      document.getElementById('btnMobileBack').style.display = 'none';
+      if (document.body.classList.contains('mobile-reader-active')) {
+        document.body.classList.remove('mobile-reader-active');
+        const btn = document.getElementById('btnMobileBack');
+        if (btn) btn.style.display = 'none';
+        document.getElementById('topHeaderTitle').textContent = t('appTitle');
+        document.getElementById('topHeaderSubtitle').textContent = t('appSubtitle');
+      }
 
       document.querySelectorAll('.sidebar-tab').forEach(t => {
         t.classList.toggle('active', t.dataset.target === nav);
@@ -527,23 +570,12 @@ function setupEventListeners() {
     if (State.currentSurah) renderReaderView();
   });
 
-  // Tajweed Toggle
-  document.getElementById('btnTajweed').addEventListener('click', () => {
-    State.tajweedEnabled = !State.tajweedEnabled;
-    localStorage.setItem('ki_tajweed', State.tajweedEnabled);
-    document.getElementById('btnTajweed').classList.toggle('active', State.tajweedEnabled);
-    showToast(State.tajweedEnabled ? 'তাজবীদ কালার চালু হয়েছে' : 'তাজবীদ কালার বন্ধ হয়েছে');
-    if (State.currentSurah) {
-      if (State.viewMode === 'mushaf') renderMushafView();
-      else renderReaderView();
-    }
-  });
+  // Tajweed & Mushaf Toggles
+  const btnTajweed = document.getElementById('btnTajweed');
+  if (btnTajweed) btnTajweed.addEventListener('click', toggleTajweed);
 
-  // Mushaf Reader Mode Toggle
-  document.getElementById('btnMushaf').addEventListener('click', () => {
-    const newMode = State.viewMode === 'reader' ? 'mushaf' : 'reader';
-    setReaderMode(newMode);
-  });
+  const btnMushaf = document.getElementById('btnMushaf');
+  if (btnMushaf) btnMushaf.addEventListener('click', toggleMushafMode);
 
   // Global Search Modal
   document.getElementById('btnSearch').addEventListener('click', openSearch);
@@ -617,9 +649,29 @@ function switchSidebarTab(tabName) {
   document.getElementById('sidebarSearch').style.display = (tabName === 'surah' || tabName === 'para') ? 'block' : 'none';
 }
 
+function toggleMushafMode() {
+  const newMode = State.viewMode === 'reader' ? 'mushaf' : 'reader';
+  setReaderMode(newMode);
+}
+
+function toggleTajweed() {
+  State.tajweedEnabled = !State.tajweedEnabled;
+  localStorage.setItem('ki_tajweed', State.tajweedEnabled);
+  const btn = document.getElementById('btnTajweed');
+  if (btn) btn.classList.toggle('active', State.tajweedEnabled);
+  showToast(State.tajweedEnabled 
+    ? (State.activeLang === 'ur' ? 'تجوید کلر فعال' : (State.activeLang === 'en' ? 'Tajweed colors enabled' : 'তাজবীদ কালার চালু হয়েছে'))
+    : (State.activeLang === 'ur' ? 'تجوید کلر بند' : (State.activeLang === 'en' ? 'Tajweed colors disabled' : 'তাজবীদ কালার বন্ধ হয়েছে')));
+  if (State.currentSurah) {
+    if (State.viewMode === 'mushaf') renderMushafView();
+    else renderReaderView();
+  }
+}
+
 function setReaderMode(mode) {
   State.viewMode = mode;
-  document.getElementById('btnMushaf').classList.toggle('active', mode === 'mushaf');
+  const btn = document.getElementById('btnMushaf');
+  if (btn) btn.classList.toggle('active', mode === 'mushaf');
   if (mode === 'mushaf') {
     renderMushafView();
   } else {
@@ -779,13 +831,29 @@ function renderSidebarAbout() {
         </a>
       </div>
 
-      <div style="font-weight:700; color:var(--primary-gold); font-size:13px; margin-bottom:6px;">প্রামাণ্য তথ্যসূত্র ও কৃতজ্ঞতা স্বীকার:</div>
+      <div style="font-weight:700; color:var(--primary-gold); font-size:13px; margin-bottom:6px;">
+        ${lang === 'ur' ? 'مستند مآخذ و اعترافِ خدمات:' : (lang === 'en' ? 'Scholarly Sources & Credits:' : 'প্রামাণ্য তথ্যসূত্র ও কৃতজ্ঞতা স্বীকার:')}
+      </div>
       <div style="font-size:12px; line-height:1.75; color:var(--text-main); background:var(--card-bg); padding:10px 12px; border-radius:8px; border:1px solid var(--card-border);">
-        • <strong>মূল উর্দু কানযুল ঈমান:</strong> আ'লা হযরত ইমাম আহমদ রেজা খান ফাযেলে বেরলভী (রহ.)<br>
-        • <strong>তাফসীরে খাযাইনুল ইরফান:</strong> সদরুল আফাযিল আল্লামা সৈয়দ মুহাম্মদ নাঈম উদ্দীন মুরাদাবাদী (রহ.)<br>
-        • <strong>বাংলা কানযুল ঈমান ডিজিটালাইজেশন:</strong> Google Vision AI প্রযুক্তির সহায়তায় প্রামাণ্য নুসখা থেকে ডিজিটাইজড ও সংকলিত: <strong>মুহাম্মদ নুরুল আবছার</strong> (Mohammad Norul Abswer)।<br>
-        • <strong>ইংরেজি অনুবাদ (Sahih International):</strong> ডিজিটাল সংকলন ও বিন্যাস: <strong>মুহাম্মদ নুরুল আবছার</strong>।<br>
-        • <strong>সফটওয়্যার উন্নয়ন ও প্রকাশনা:</strong> Apps Abswer (মুহাম্মদ নুরুল আবছার)।
+        ${lang === 'ur' ? `
+          • <strong>اصل اردو کنز الایمان:</strong> اعلیٰ حضرت امام احمد رضا خان فاضلِ بریلوی قدس سرہٗ العزیز<br>
+          • <strong>تفسیر خزائن العرفان:</strong> صدر الافاضل علامہ سید محمد نعیم الدین مراد آبادی علیہ الرحمہ<br>
+          • <strong>بنگلہ کنز الایمان ڈیجیٹلائزیشن:</strong> مستند نسخے سے گوگل ویژن اے آئی ٹیکنالوجی کی مدد سے مکمل پروف ریڈنگ و ڈیجیٹلائزیشن بذریعہ <strong>محمد نور الابصار</strong> (Mohammad Norul Abswer)۔<br>
+          • <strong>انگریزی ترجمہ:</strong> ڈیجیٹل کمپائلیشن، اسٹرکچرنگ و ایڈجسٹمنٹ بذریعہ <strong>محمد نور الابصار</strong> (Mohammad Norul Abswer)۔<br>
+          • <strong>سافٹ ویئر ڈیولپمنٹ و پبلشنگ:</strong> Apps Abswer (محمد نور الابصار)۔
+        ` : (lang === 'en' ? `
+          • <strong>Original Urdu Kanz al-Iman:</strong> Ala Hazrat Imam Ahmad Raza Khan Barelvi (Rahimahullah)<br>
+          • <strong>Khaza'in al-'Irfan Tafsir:</strong> Sadr al-Afadil Allama Syed Muhammad Naeem-ud-Deen Muradabadi (Rahimahullah)<br>
+          • <strong>Bengali Kanzul Iman Translation:</strong> Precision transcription, proofreading, and digitization directly compiled from authoritative editions using Google Vision AI by <strong>Mohammad Norul Abswer</strong>.<br>
+          • <strong>English Translation:</strong> Digitally structured, verified, and integrated by <strong>Mohammad Norul Abswer</strong>.<br>
+          • <strong>Software Architecture & Publishing:</strong> Apps Abswer (Mohammad Norul Abswer).
+        ` : `
+          • <strong>মূল উর্দু কানযুল ঈমান:</strong> আ'লা হযরত ইমাম আহমদ রেজা খান ফাযেলে বেরলভী (রহ.)<br>
+          • <strong>তাফসীরে খাযাইনুল ইরফান:</strong> সদরুল আফাযিল আল্লামা সৈয়দ মুহাম্মদ নাঈম উদ্দীন মুরাদাবাদী (রহ.)<br>
+          • <strong>বাংলা কানযুল ঈমান ডিজিটালাইজেশন:</strong> Google Vision AI প্রযুক্তির সহায়তায় প্রামাণ্য নুসখা থেকে ডিজিটাইজড, প্রুফরিডিং ও সংকলন: <strong>মুহাম্মদ নুরুল আবছার</strong> (Mohammad Norul Abswer)।<br>
+          • <strong>ইংরেজি অনুবাদ:</strong> ডিজিটাল সংকলন ও বিন্যাস: <strong>মুহাম্মদ নুরুল আবছার</strong> (Mohammad Norul Abswer)।<br>
+          • <strong>সফটওয়্যার উন্নয়ন ও প্রকাশনা:</strong> Apps Abswer (মুহাম্মদ নুরুল আবছার)।
+        `)}
       </div>
     </div>
   `;
@@ -826,11 +894,16 @@ async function loadSurah(suraIndex, callback, targetAya = null) {
     // On Mobile: Switch to Reader Pane and Show Back Button
     if (window.innerWidth < 1024) {
       document.body.classList.add('mobile-reader-active');
-      document.getElementById('btnMobileBack').style.display = 'flex';
+      const btnBack = document.getElementById('btnMobileBack');
+      if (btnBack) btnBack.style.display = 'flex';
       const name = State.activeLang === 'ur' ? State.currentSurah.sura.name_ur :
         (State.activeLang === 'en' ? State.currentSurah.sura.name_en : State.currentSurah.sura.name_bn);
-      document.getElementById('topHeaderTitle').textContent = name;
+      document.getElementById('topHeaderTitle').textContent = `${toLocalizedNum(suraIndex, State.activeLang)}. ${name}`;
       document.getElementById('topHeaderSubtitle').textContent = State.currentSurah.sura.name_ar;
+
+      if (!history.state || !history.state.reader || history.state.suraIndex !== suraIndex) {
+        history.pushState({ reader: true, suraIndex }, '');
+      }
     }
 
     // Update active highlight in sidebar
@@ -968,6 +1041,19 @@ function renderReaderView() {
           <span>•</span>
           <span>${toLocalizedNum(sura.total_rukus, lang)} ${rukuWord}</span>
         </div>
+        <div class="surah-quick-actions">
+          <button class="surah-action-pill" onclick="playSurahAudio(${sura.sura_index}, ${sura.total_ayats})">
+            ${ICONS.speaker} <span>${lang === 'ur' ? 'مکمل تلاوت' : (lang === 'en' ? 'Full Recitation' : 'পূর্ণ তিলাওয়াত')}</span>
+          </button>
+          <button class="surah-action-pill ${State.viewMode === 'mushaf' ? 'active' : ''}" onclick="toggleMushafMode()">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span>${t('mushafMode')}</span>
+          </button>
+          <button class="surah-action-pill ${State.tajweedEnabled ? 'active' : ''}" onclick="toggleTajweed()">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>
+            <span>${t('tajweed')}</span>
+          </button>
+        </div>
       </div>
       <div class="surah-header-artwork">
         <img src="${emblemImg}" alt="${typeName}" class="surah-artwork-img" title="${typeName}">
@@ -1041,15 +1127,42 @@ function renderMushafView() {
   }).join('');
 
   const surahName = lang === 'ur' ? sura.name_ur : (lang === 'en' ? sura.name_en : sura.name_bn);
+  const isMakki = (sura.type_en || '').toLowerCase().includes('mecc') || (sura.type_bn || '').includes('মাক্কী');
+  const emblemImg = isMakki ? 'icons/ic_mecca.webp' : 'icons/ic_medina.webp';
+  const typeName = lang === 'ur' ? sura.type_ur : (lang === 'en' ? sura.type_en : sura.type_bn);
 
   container.innerHTML = `
-    <div class="reader-header">
-      <div class="reader-title-ar">${sura.name_ar}</div>
-      <div class="reader-title-bn">${surahName} (${t('mushafMode')})</div>
-      <div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">${toLocalizedNum(sura.total_ayats, lang)} ${t('aya')}</div>
-      <button class="ayat-btn" onclick="playSurahAudio(${sura.sura_index}, ${sura.total_ayats})" style="font-size:14px; padding:8px 16px;">
-        ${ICONS.play} ${lang === 'ur' ? 'مکمل سورت کی تلاوت سنیں' : (lang === 'en' ? 'Listen to Full Surah Recitation' : 'পূর্ণ সূরা তিলাওয়াত শুনুন')}
-      </button>
+    <div class="surah-header-card">
+      <div class="surah-header-info">
+        <div class="reader-title-ar">${sura.name_ar}</div>
+        <div class="reader-title-local">${surahName} (${t('mushafMode')})</div>
+        <div class="reader-meta">
+          <span class="type-pill ${isMakki ? 'makki-pill' : 'madani-pill'}">
+            <img src="${emblemImg}" alt="" class="list-type-icon">
+            <span>${typeName}</span>
+          </span>
+          <span>•</span>
+          <span>${toLocalizedNum(sura.total_ayats, lang)} ${t('aya')}</span>
+          <span>•</span>
+          <span>${toLocalizedNum(sura.total_rukus, lang)} ${t('ruku')}</span>
+        </div>
+        <div class="surah-quick-actions">
+          <button class="surah-action-pill" onclick="playSurahAudio(${sura.sura_index}, ${sura.total_ayats})">
+            ${ICONS.speaker} <span>${lang === 'ur' ? 'مکمل تلاوت' : (lang === 'en' ? 'Full Recitation' : 'পূর্ণ তিলাওয়াত')}</span>
+          </button>
+          <button class="surah-action-pill active" onclick="toggleMushafMode()">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 1 3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span>${lang === 'ur' ? 'آیت بہ آیت ترجمہ' : (lang === 'en' ? 'Verse-by-Verse' : 'আয়াতভিত্তিক অনুবাদ')}</span>
+          </button>
+          <button class="surah-action-pill ${State.tajweedEnabled ? 'active' : ''}" onclick="toggleTajweed()">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>
+            <span>${t('tajweed')}</span>
+          </button>
+        </div>
+      </div>
+      <div class="surah-header-artwork">
+        <img src="${emblemImg}" alt="" class="surah-artwork-img">
+      </div>
     </div>
     <div class="mushaf-container">
       ${bismillahHtml}
@@ -1157,6 +1270,7 @@ function stopAudio() {
   State.audio.currentTime = 0;
   State.isPlaying = false;
   document.getElementById('audioBar').classList.remove('active');
+  document.body.classList.remove('audio-playing');
   document.querySelectorAll('.ayat-card').forEach(c => c.classList.remove('playing'));
 }
 
@@ -1175,6 +1289,7 @@ function playPrevAya() {
 function updateAudioBar() {
   const bar = document.getElementById('audioBar');
   bar.classList.add('active');
+  document.body.classList.add('audio-playing');
 
   const sura = State.suras.find(s => s.sura_index === State.playingSura);
   const suraName = sura ? (State.activeLang === 'ur' ? sura.name_ur : (State.activeLang === 'en' ? sura.name_en : sura.name_bn)) : '';
