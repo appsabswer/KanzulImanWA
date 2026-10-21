@@ -37,6 +37,7 @@ const State = {
     arabicSize: parseInt(localStorage.getItem('ki_ar_size') || '28'),
     transSize: parseInt(localStorage.getItem('ki_tr_size') || '16'),
     tafsirSize: parseInt(localStorage.getItem('ki_tf_size') || '15'),
+    showTranslit: localStorage.getItem('ki_show_translit') !== 'false',
     showBn: localStorage.getItem('ki_show_bn') !== 'false',
     showUr: localStorage.getItem('ki_show_ur') !== 'false',
     showEn: localStorage.getItem('ki_show_en') === 'true',
@@ -64,6 +65,7 @@ const I18N = {
     searchPlaceholder: 'দ্রুত খুঁজুন (নাম বা নম্বর)...',
     searchTitle: 'কুরআন অনুসন্ধান',
     searchAllPlaceholder: 'আরবি, বাংলা বা উর্দু শব্দ লিখুন...',
+    searchModalPlaceholder: 'সূরা বা পারার নাম লিখুন (যেমন: ইয়াসীন, রহমান, ১৮, ১১৪)...',
     mushafMode: 'মুসহাফ পাঠ',
     tajweed: 'তাজবীদ কালার',
     settings: 'সেটিংস',
@@ -86,6 +88,32 @@ const I18N = {
     webApp: 'WebApp (PWA ব্রাউজার)',
     winApp: 'WindowsApp (মাইক্রোসফট স্টোর)',
     androidApp: 'AndroidApp (গুগল প্লে স্টোর)',
+    // Settings Drawer Translations
+    drawerTitle: 'সেটিংস ও পছন্দসমূহ',
+    drawerPlatformsTitle: 'অ্যাপের ৩টি প্ল্যাটফর্ম:',
+    drawerWebMain: '১. WebApp (PWA ব্রাউজার)',
+    drawerWebSub: 'অনলাইন ও অফলাইনে সরাসরি ব্রাউজারে',
+    drawerWinMain: '২. WindowsApp (ডেস্কটপ)',
+    drawerWinSub: 'Microsoft Store থেকে ইনস্টল করুন',
+    drawerPlayMain: '৩. AndroidApp (মোবাইল)',
+    drawerPlaySub: 'Google Play Store থেকে ইনস্টল করুন',
+    drawerLangTitle: 'অ্যাপের ভাষা (Language / زبان)',
+    drawerThemeTitle: 'থিম নির্বাচন',
+    themeDark: 'ডার্ক',
+    themeLight: 'লাইট',
+    themeSepia: 'সেপিয়া',
+    drawerArabicSize: 'আরবি ফন্ট সাইজ',
+    drawerTransSize: 'অনুবাদ ফন্ট সাইজ',
+    drawerTafsirSize: 'তাফসীর ফন্ট সাইজ',
+    drawerDisplayTitle: 'উচ্চারণ ও অনুবাদ প্রদর্শন',
+    chkTranslitLabel: 'উচ্চারণ প্রদর্শন (Transliteration)',
+    chkBnLabel: 'বাংলা কানযুল ঈমান (মুহাম্মদ নুরুল আবছার)',
+    chkUrLabel: 'উর্দু কানযুল ঈমান (ইমাম আহমদ রেজা খান রহ.)',
+    chkEnLabel: 'ইংরেজি অনুবাদ (সংকলন: মুহাম্মদ নুরুল আবছার)',
+    drawerFooterText: 'কানযুল ঈমান কুরআন ও তাফসীর v1.0.0<br>ওয়েব, উইন্ডোজ ও এন্ড্রয়েড — ৩টি সংস্করণেই উন্মুক্ত<br>© 2026 Mohammad Norul Abswer',
+    pronunciation: 'উচ্চারণ',
+    transTranslation: 'অনুবাদ',
+    backTooltip: 'তালিকায় ফিরুন'
   },
   ur: {
     appTitle: 'کنز الایمان',
@@ -97,6 +125,7 @@ const I18N = {
     searchPlaceholder: 'تلاش کریں (نام یا نمبر)...',
     searchTitle: 'تلاشِ قرآن',
     searchAllPlaceholder: 'عربی، اردو یا انگریزی الفاظ درج کریں...',
+    searchModalPlaceholder: 'سورہ یا پارے کا نام لکھیں (جیسے: یٰسین، الرحمن، ۱۸، ۱۱۴)...',
     mushafMode: 'مصحف تلاوت',
     tajweed: 'تجوید کلر',
     settings: 'ترتیبات',
@@ -119,6 +148,32 @@ const I18N = {
     webApp: 'WebApp (آن لائن PWA)',
     winApp: 'WindowsApp (مائیکروسافٹ اسٹور)',
     androidApp: 'AndroidApp (گوگل پلے اسٹور)',
+    // Settings Drawer Translations
+    drawerTitle: 'ترتیبات و ترجیحات',
+    drawerPlatformsTitle: 'ایپ کے ۳ پلیٹ فارمز:',
+    drawerWebMain: '۱. WebApp (آن لائن PWA)',
+    drawerWebSub: 'براؤزر اور آف لائن مطالعہ',
+    drawerWinMain: '۲. WindowsApp (ڈیسک ٹاپ)',
+    drawerWinSub: 'مائیکروسافٹ اسٹور سے ڈاؤن لوڈ کریں',
+    drawerPlayMain: '۳. AndroidApp (موبائل)',
+    drawerPlaySub: 'گوگل پلے اسٹور سے انسٹال کریں',
+    drawerLangTitle: 'ایپ کی زبان (Language / زبان)',
+    drawerThemeTitle: 'تھیم کا انتخاب',
+    themeDark: 'ڈارک',
+    themeLight: 'لائٹ',
+    themeSepia: 'سیپیا',
+    drawerArabicSize: 'عربی فونٹ سائز',
+    drawerTransSize: 'ترجمہ فونٹ سائز',
+    drawerTafsirSize: 'تفسیر فونٹ سائز',
+    drawerDisplayTitle: 'تلفظ اور ترجمہ کی ترتیبات',
+    chkTranslitLabel: 'تلفظ دکھائیں (Transliteration)',
+    chkBnLabel: 'بنگالی کنز الایمان (محمد نور الابصار)',
+    chkUrLabel: 'اردو کنز الایمان (امام احمد رضا خان علیہ الرحمہ)',
+    chkEnLabel: 'انگریزی ترجمہ (محمد نور الابصار)',
+    drawerFooterText: 'کنز الایمان قرآن و تفسیر v1.0.0<br>ویب، ونڈوز اور اینڈرائیڈ — تینوں پلیٹ فارمز پر دستیاب<br>© 2026 Mohammad Norul Abswer',
+    pronunciation: 'تلفظ',
+    transTranslation: 'ترجمہ',
+    backTooltip: 'واپس فہرست میں جائیں'
   },
   en: {
     appTitle: 'Kanzul Iman',
@@ -130,6 +185,7 @@ const I18N = {
     searchPlaceholder: 'Quick search (name or number)...',
     searchTitle: 'Search Quran',
     searchAllPlaceholder: 'Type Arabic, English or Bengali...',
+    searchModalPlaceholder: 'Type Surah name or number (e.g. Yaseen, Rahman, 18, 114)...',
     mushafMode: 'Mushaf Mode',
     tajweed: 'Tajweed Colors',
     settings: 'Settings',
@@ -152,6 +208,32 @@ const I18N = {
     webApp: 'WebApp (Online PWA)',
     winApp: 'WindowsApp (Microsoft Store)',
     androidApp: 'AndroidApp (Google Play Store)',
+    // Settings Drawer Translations
+    drawerTitle: 'Settings & Preferences',
+    drawerPlatformsTitle: '3 App Platforms:',
+    drawerWebMain: '1. WebApp (PWA Browser)',
+    drawerWebSub: 'Online & offline in browser',
+    drawerWinMain: '2. WindowsApp (Desktop)',
+    drawerWinSub: 'Install from Microsoft Store',
+    drawerPlayMain: '3. AndroidApp (Mobile)',
+    drawerPlaySub: 'Install from Google Play Store',
+    drawerLangTitle: 'App Language (Language / زبان)',
+    drawerThemeTitle: 'Appearance Theme',
+    themeDark: 'Dark',
+    themeLight: 'Light',
+    themeSepia: 'Sepia',
+    drawerArabicSize: 'Arabic Font Size',
+    drawerTransSize: 'Translation Font Size',
+    drawerTafsirSize: 'Tafsir Font Size',
+    drawerDisplayTitle: 'Pronunciation & Translation Options',
+    chkTranslitLabel: 'Show Pronunciation (Transliteration)',
+    chkBnLabel: 'Bengali Kanzul Iman (Mohammad Norul Abswer)',
+    chkUrLabel: 'Urdu Kanzul Iman (Imam Ahmad Raza Khan)',
+    chkEnLabel: 'English Translation (Mohammad Norul Abswer)',
+    drawerFooterText: 'Kanzul Iman Quran & Tafsir v1.0.0<br>Web, Windows & Android — Available on 3 Platforms<br>© 2026 Mohammad Norul Abswer',
+    pronunciation: 'Pronunciation',
+    transTranslation: 'Translation',
+    backTooltip: 'Back to list'
   }
 };
 
@@ -331,11 +413,99 @@ function setAppLanguage(lang) {
   });
 
   document.documentElement.lang = lang;
-  if (lang === 'ur') {
-    document.body.classList.add('lang-ur');
-  } else {
-    document.body.classList.remove('lang-ur');
+  document.body.classList.remove('lang-bn', 'lang-ur', 'lang-en');
+  document.body.classList.add(`lang-${lang}`);
+
+  // Automatically switch primary translation matching selected language
+  if (lang === 'bn') {
+    State.settings.showBn = true;
+    State.settings.showUr = false;
+    State.settings.showEn = false;
+  } else if (lang === 'ur') {
+    State.settings.showBn = false;
+    State.settings.showUr = true;
+    State.settings.showEn = false;
+  } else if (lang === 'en') {
+    State.settings.showBn = false;
+    State.settings.showUr = false;
+    State.settings.showEn = true;
   }
+  localStorage.setItem('ki_show_bn', State.settings.showBn);
+  localStorage.setItem('ki_show_ur', State.settings.showUr);
+  localStorage.setItem('ki_show_en', State.settings.showEn);
+
+  // Update Settings Drawer Translations & Checkboxes
+  const drawerTitle = document.getElementById('drawerTitle');
+  if (drawerTitle) drawerTitle.textContent = t('drawerTitle');
+
+  const drawerPlatformsHeading = document.getElementById('drawerPlatformsHeading');
+  if (drawerPlatformsHeading) drawerPlatformsHeading.textContent = t('drawerPlatformsTitle');
+
+  const badgeWebMain = document.getElementById('badgeWebMain');
+  if (badgeWebMain) badgeWebMain.textContent = t('drawerWebMain');
+  const badgeWebSub = document.getElementById('badgeWebSub');
+  if (badgeWebSub) badgeWebSub.textContent = t('drawerWebSub');
+
+  const badgeWinMain = document.getElementById('badgeWinMain');
+  if (badgeWinMain) badgeWinMain.textContent = t('drawerWinMain');
+  const badgeWinSub = document.getElementById('badgeWinSub');
+  if (badgeWinSub) badgeWinSub.textContent = t('drawerWinSub');
+
+  const badgePlayMain = document.getElementById('badgePlayMain');
+  if (badgePlayMain) badgePlayMain.textContent = t('drawerPlayMain');
+  const badgePlaySub = document.getElementById('badgePlaySub');
+  if (badgePlaySub) badgePlaySub.textContent = t('drawerPlaySub');
+
+  const lblDrawerLang = document.getElementById('lblDrawerLang');
+  if (lblDrawerLang) lblDrawerLang.textContent = t('drawerLangTitle');
+
+  const lblDrawerTheme = document.getElementById('lblDrawerTheme');
+  if (lblDrawerTheme) lblDrawerTheme.textContent = t('drawerThemeTitle');
+
+  const btnThemeDark = document.getElementById('btnThemeDark');
+  if (btnThemeDark) btnThemeDark.textContent = t('themeDark');
+  const btnThemeLight = document.getElementById('btnThemeLight');
+  if (btnThemeLight) btnThemeLight.textContent = t('themeLight');
+  const btnThemeSepia = document.getElementById('btnThemeSepia');
+  if (btnThemeSepia) btnThemeSepia.textContent = t('themeSepia');
+
+  const lblHeadingArabicSize = document.getElementById('lblHeadingArabicSize');
+  if (lblHeadingArabicSize) lblHeadingArabicSize.textContent = t('drawerArabicSize');
+  const lblHeadingTransSize = document.getElementById('lblHeadingTransSize');
+  if (lblHeadingTransSize) lblHeadingTransSize.textContent = t('drawerTransSize');
+  const lblHeadingTafsirSize = document.getElementById('lblHeadingTafsirSize');
+  if (lblHeadingTafsirSize) lblHeadingTafsirSize.textContent = t('drawerTafsirSize');
+
+  const lblHeadingDisplayOpts = document.getElementById('lblHeadingDisplayOpts');
+  if (lblHeadingDisplayOpts) lblHeadingDisplayOpts.textContent = t('drawerDisplayTitle');
+
+  const lblChkTranslit = document.getElementById('lblChkTranslit');
+  if (lblChkTranslit) lblChkTranslit.textContent = t('chkTranslitLabel');
+  const lblChkBn = document.getElementById('lblChkBn');
+  if (lblChkBn) lblChkBn.textContent = t('chkBnLabel');
+  const lblChkUr = document.getElementById('lblChkUr');
+  if (lblChkUr) lblChkUr.textContent = t('chkUrLabel');
+  const lblChkEn = document.getElementById('lblChkEn');
+  if (lblChkEn) lblChkEn.textContent = t('chkEnLabel');
+
+  const drawerFooter = document.getElementById('drawerFooter');
+  if (drawerFooter) drawerFooter.innerHTML = t('drawerFooterText');
+
+  // Sync Checkbox states
+  const chkBn = document.getElementById('chkBn');
+  if (chkBn) chkBn.checked = State.settings.showBn;
+  const chkUr = document.getElementById('chkUr');
+  if (chkUr) chkUr.checked = State.settings.showUr;
+  const chkEn = document.getElementById('chkEn');
+  if (chkEn) chkEn.checked = State.settings.showEn;
+  const chkTranslit = document.getElementById('chkTranslit');
+  if (chkTranslit) chkTranslit.checked = State.settings.showTranslit !== false;
+
+  // Search Modal localization
+  const searchInputModal = document.getElementById('searchInput');
+  if (searchInputModal) searchInputModal.placeholder = t('searchModalPlaceholder');
+  const btnMobileBack = document.getElementById('btnMobileBack');
+  if (btnMobileBack) btnMobileBack.title = t('backTooltip');
 
   // Update Header & UI texts
   if (State.currentSurah && document.body.classList.contains('mobile-reader-active')) {
@@ -551,7 +721,16 @@ function setupEventListeners() {
     });
   });
 
-  // Translation Visibility Toggles
+  // Translation & Pronunciation Visibility Toggles
+  const chkTranslit = document.getElementById('chkTranslit');
+  if (chkTranslit) {
+    chkTranslit.addEventListener('change', (e) => {
+      State.settings.showTranslit = e.target.checked;
+      localStorage.setItem('ki_show_translit', e.target.checked);
+      if (State.currentSurah) renderReaderView();
+    });
+  }
+
   document.getElementById('chkBn').addEventListener('change', (e) => {
     State.settings.showBn = e.target.checked;
     localStorage.setItem('ki_show_bn', e.target.checked);
@@ -618,6 +797,8 @@ function applyTheme(theme) {
   State.settings.theme = theme;
   localStorage.setItem('ki_theme', theme);
   document.documentElement.setAttribute('data-theme', theme);
+  document.body.classList.remove('theme-dark', 'theme-light', 'theme-sepia');
+  document.body.classList.add(`theme-${theme}`);
 
   document.querySelectorAll('.theme-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.theme === theme);
@@ -1067,9 +1248,55 @@ function renderReaderView() {
     const arabicText = applyTajweed(v.ar);
     const sajdahBadge = v.is_sajdah ? `<span class="ayat-badge" style="background:#E91E63; color:#fff; border:none;">${t('sajdahWord')}</span>` : '';
 
+    // Pronunciation / Transliteration
+    let translitHtml = '';
+    if (State.settings.showTranslit !== false) {
+      let translitText = '';
+      const translitBadge = t('pronunciation');
+      if (lang === 'bn') {
+        translitText = v.trnl_bn || '';
+      } else if (lang === 'en') {
+        translitText = v.trnl_en || v.trnl_bn || '';
+      } else if (lang === 'ur') {
+        translitText = v.trnl_en || v.trnl_bn || '';
+      }
+      if (translitText) {
+        translitHtml = `
+          <div class="ayat-translit">
+            <span class="translit-badge">${translitBadge}:</span>
+            <span class="translit-text ${lang === 'en' ? 'translit-en' : ''}">${translitText}</span>
+          </div>
+        `;
+      }
+    }
+
+    // Dynamic Translations (Primary selected language first, then other user-selected languages)
+    let transHtml = '';
+    if (lang === 'bn' && State.settings.showBn && v.tr_bn) {
+      transHtml += `<div class="ayat-trans-bn active-lang-trans"><strong class="trans-label">অনুবাদ:</strong> ${v.tr_bn}</div>`;
+    } else if (lang === 'ur' && State.settings.showUr && v.tr_ur) {
+      transHtml += `<div class="ayat-trans-ur active-lang-trans dir-rtl"><strong class="trans-label">ترجمہ کنز الایمان:</strong> ${v.tr_ur}</div>`;
+    } else if (lang === 'en' && State.settings.showEn && v.tr_en) {
+      transHtml += `<div class="ayat-trans-en active-lang-trans"><strong class="trans-label">Translation:</strong> ${v.tr_en}</div>`;
+    }
+
+    // Additional secondary translations if enabled by user in settings
+    if (lang !== 'bn' && State.settings.showBn && v.tr_bn) {
+      const bnLabel = lang === 'ur' ? 'بنگالی ترجمہ:' : 'Bengali:';
+      transHtml += `<div class="ayat-trans-bn sub-trans"><strong class="trans-sub-label">${bnLabel}</strong> ${v.tr_bn}</div>`;
+    }
+    if (lang !== 'ur' && State.settings.showUr && v.tr_ur) {
+      const urLabel = lang === 'en' ? 'Urdu Kanzul Iman:' : 'উর্দু কানযুল ঈমান:';
+      transHtml += `<div class="ayat-trans-ur sub-trans dir-rtl"><strong class="trans-sub-label">${urLabel}</strong> ${v.tr_ur}</div>`;
+    }
+    if (lang !== 'en' && State.settings.showEn && v.tr_en) {
+      const enLabel = lang === 'ur' ? 'انگریزی ترجمہ:' : 'ইংরেজি অনুবাদ:';
+      transHtml += `<div class="ayat-trans-en sub-trans"><strong class="trans-sub-label">${enLabel}</strong> ${v.tr_en}</div>`;
+    }
+
     const tafsirContent = (lang === 'ur' && v.tf_ur) ? v.tf_ur : ((lang === 'en' && v.tf_en) ? v.tf_en : v.tf_bn);
     const formattedTafsir = formatTafsirText(tafsirContent, lang);
-    const shaanContent = (lang === 'ur' && v.asb_ur) ? v.asb_ur : v.asb_bn;
+    const shaanContent = lang === 'ur' ? (v.asb_ur || v.asb_bn) : (lang === 'en' ? (v.asb_en || v.asb_bn) : v.asb_bn);
 
     return `
       <div class="ayat-card ${isPlaying ? 'playing' : ''}" id="ayat-${v.aya}">
@@ -1087,9 +1314,9 @@ function renderReaderView() {
 
         <div class="ayat-arabic">${arabicText}</div>
 
-        ${State.settings.showBn && v.tr_bn ? `<div class="ayat-trans-bn"><strong>অনুবাদ (বাংলা):</strong> ${v.tr_bn}</div>` : ''}
-        ${State.settings.showUr && v.tr_ur ? `<div class="ayat-trans-ur">${v.tr_ur}</div>` : ''}
-        ${State.settings.showEn && v.tr_en ? `<div class="ayat-trans-en"><strong>En:</strong> ${v.tr_en}</div>` : ''}
+        ${translitHtml}
+
+        ${transHtml}
 
         <div class="tafsir-box" id="tafsir-${v.aya}">
           <div class="tafsir-header">
@@ -1186,7 +1413,33 @@ function copyAyatText(suraIndex, aya) {
   const sura = State.currentSurah.sura;
   const sName = lang === 'ur' ? sura.name_ur : (lang === 'en' ? sura.name_en : sura.name_bn);
 
-  const text = `${sName} [${toLocalizedNum(suraIndex, lang)}:${toLocalizedNum(aya, lang)}]\n\n${v.ar}\n\nবাংলা অনুবাদ: ${v.tr_bn}\n\nاردو کنز الایمان:\n${v.tr_ur}\n\nEnglish: ${v.tr_en}`;
+  let parts = [];
+  parts.push(`${sName} [${toLocalizedNum(suraIndex, lang)}:${toLocalizedNum(aya, lang)}]`);
+  parts.push(v.ar);
+
+  // Pronunciation
+  if (State.settings.showTranslit !== false) {
+    if (lang === 'bn' && v.trnl_bn) parts.push(`উচ্চারণ: ${v.trnl_bn}`);
+    else if (lang === 'en' && (v.trnl_en || v.trnl_bn)) parts.push(`Pronunciation: ${v.trnl_en || v.trnl_bn}`);
+    else if (lang === 'ur' && (v.trnl_en || v.trnl_bn)) parts.push(`تلفظ: ${v.trnl_en || v.trnl_bn}`);
+  }
+
+  // Active translation
+  if (lang === 'bn') {
+    if (v.tr_bn) parts.push(`বাংলা অনুবাদ: ${v.tr_bn}`);
+    if (State.settings.showUr && v.tr_ur) parts.push(`اردو کنز الایمان:\n${v.tr_ur}`);
+    if (State.settings.showEn && v.tr_en) parts.push(`English: ${v.tr_en}`);
+  } else if (lang === 'ur') {
+    if (v.tr_ur) parts.push(`ترجمہ کنز الایمان:\n${v.tr_ur}`);
+    if (State.settings.showBn && v.tr_bn) parts.push(`বাংলা অনুবাদ: ${v.tr_bn}`);
+    if (State.settings.showEn && v.tr_en) parts.push(`English: ${v.tr_en}`);
+  } else if (lang === 'en') {
+    if (v.tr_en) parts.push(`Translation: ${v.tr_en}`);
+    if (State.settings.showBn && v.tr_bn) parts.push(`Bengali: ${v.tr_bn}`);
+    if (State.settings.showUr && v.tr_ur) parts.push(`Urdu Kanzul Iman:\n${v.tr_ur}`);
+  }
+
+  const text = parts.join('\n\n');
   navigator.clipboard.writeText(text).then(() => showToast(t('toastCopied')));
 }
 
@@ -1199,15 +1452,38 @@ function copyFullTafsir(suraIndex, aya) {
   const sura = State.currentSurah.sura;
   const sName = lang === 'ur' ? sura.name_ur : (lang === 'en' ? sura.name_en : sura.name_bn);
 
-  let cleanTafsir = (v.tf_bn || '')
+  const tafsirRaw = (lang === 'ur' && v.tf_ur) ? v.tf_ur : ((lang === 'en' && v.tf_en) ? v.tf_en : v.tf_bn);
+  let cleanTafsir = (tafsirRaw || '')
     .replace(/(?:«|<<)(.*?)(?:»|>>)/g, '«$1»')
     .replace(/\*\*/g, '')
     .trim();
 
-  let text = `${sName} [${toLocalizedNum(suraIndex, lang)}:${toLocalizedNum(aya, lang)}]\n\n${v.ar}\n\nবাংলা অনুবাদ: ${v.tr_bn}\n\nখাযাইনুল ইরফান তাফসীর:\n`;
-  if (v.asb_bn) text += `শানে নুযূল: ${v.asb_bn}\n\n`;
-  text += cleanTafsir;
+  const shaanRaw = lang === 'ur' ? (v.asb_ur || v.asb_bn) : (lang === 'en' ? (v.asb_en || v.asb_bn) : v.asb_bn);
 
+  let parts = [];
+  parts.push(`${sName} [${toLocalizedNum(suraIndex, lang)}:${toLocalizedNum(aya, lang)}]`);
+  parts.push(v.ar);
+
+  // Pronunciation
+  if (State.settings.showTranslit !== false) {
+    if (lang === 'bn' && v.trnl_bn) parts.push(`উচ্চারণ: ${v.trnl_bn}`);
+    else if (lang === 'en' && (v.trnl_en || v.trnl_bn)) parts.push(`Pronunciation: ${v.trnl_en || v.trnl_bn}`);
+    else if (lang === 'ur' && (v.trnl_en || v.trnl_bn)) parts.push(`تلفظ: ${v.trnl_en || v.trnl_bn}`);
+  }
+
+  // Active translation
+  if (lang === 'bn' && v.tr_bn) parts.push(`বাংলা অনুবাদ: ${v.tr_bn}`);
+  else if (lang === 'ur' && v.tr_ur) parts.push(`ترجمہ کنز الایمان:\n${v.tr_ur}`);
+  else if (lang === 'en' && v.tr_en) parts.push(`Translation: ${v.tr_en}`);
+
+  // Tafsir Heading & Shaan
+  const tafsirHeading = t('tafsirTitle');
+  let tafsirSec = `${tafsirHeading}:\n`;
+  if (shaanRaw) tafsirSec += `${t('shaanNuzul')}: ${shaanRaw}\n\n`;
+  tafsirSec += cleanTafsir;
+  parts.push(tafsirSec);
+
+  const text = parts.join('\n\n');
   navigator.clipboard.writeText(text).then(() => showToast(t('toastTafsirCopied')));
 }
 
