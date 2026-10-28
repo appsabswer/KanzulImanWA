@@ -68,10 +68,14 @@
   font-display: swap;
 }
 
+/* ========================================================
+   Theme System: Dark (Default), Light, Sepia
+   ======================================================== */
 :root,
-body.theme-dark,
-[data-theme="dark"],
-[data-theme="dark"] body {
+:root[data-theme="dark"],
+html[data-theme="dark"],
+body[data-theme="dark"],
+body.theme-dark {
   --primary-gold: #BA8316;
   --primary-gold-dark: #996B0E;
   --primary-gold-light: #C99522;
@@ -93,48 +97,52 @@ body.theme-dark,
 
   /* Default Core Fonts */
   --font-bengali: 'KonaBengali', 'KohinoorBengali', sans-serif;
-  --font-arabic: 'SaleemQuran', 'AlQalamQuran', serif;
+  --font-arabic: 'AlQalamQuran', 'SaleemQuran', serif;
   --font-urdu: 'UrduNastaliq', serif;
 }
 
 /* Theme: Light */
-body.theme-light,
-[data-theme="light"],
-[data-theme="light"] body {
-  --primary-gold: #9E6B0A;
-  --primary-gold-dark: #7F5504;
-  --primary-gold-light: #BA8316;
-  --gold-tint: rgba(158, 107, 10, 0.08);
-  --gold-glow: rgba(158, 107, 10, 0.18);
+:root[data-theme="light"],
+html[data-theme="light"],
+body[data-theme="light"],
+html.theme-light,
+body.theme-light {
+  --primary-gold: #9E6B0A !important;
+  --primary-gold-dark: #7F5504 !important;
+  --primary-gold-light: #BA8316 !important;
+  --gold-tint: rgba(158, 107, 10, 0.08) !important;
+  --gold-glow: rgba(158, 107, 10, 0.18) !important;
 
-  --bg-color: #F8F9FA;
-  --surface-color: #FFFFFF;
-  --card-bg: #FFFFFF;
-  --card-border: rgba(158, 107, 10, 0.22);
-  --text-main: #1A1D20;
-  --text-muted: #4B5563;
-  --badge-bg: rgba(158, 107, 10, 0.12);
-  --translit-bg: rgba(158, 107, 10, 0.06);
+  --bg-color: #F8F9FA !important;
+  --surface-color: #FFFFFF !important;
+  --card-bg: #FFFFFF !important;
+  --card-border: rgba(158, 107, 10, 0.22) !important;
+  --text-main: #1A1D20 !important;
+  --text-muted: #4B5563 !important;
+  --badge-bg: rgba(158, 107, 10, 0.12) !important;
+  --translit-bg: rgba(158, 107, 10, 0.06) !important;
 }
 
 /* Theme: Sepia (Parchment) */
-body.theme-sepia,
-[data-theme="sepia"],
-[data-theme="sepia"] body {
-  --primary-gold: #966107;
-  --primary-gold-dark: #7A4E03;
-  --primary-gold-light: #BA8316;
-  --gold-tint: rgba(150, 97, 7, 0.10);
-  --gold-glow: rgba(150, 97, 7, 0.20);
+:root[data-theme="sepia"],
+html[data-theme="sepia"],
+body[data-theme="sepia"],
+html.theme-sepia,
+body.theme-sepia {
+  --primary-gold: #966107 !important;
+  --primary-gold-dark: #7A4E03 !important;
+  --primary-gold-light: #BA8316 !important;
+  --gold-tint: rgba(150, 97, 7, 0.10) !important;
+  --gold-glow: rgba(150, 97, 7, 0.20) !important;
 
-  --bg-color: #F5EFEB;
-  --surface-color: #ECE5DE;
-  --card-bg: #FAF6F2;
-  --card-border: rgba(150, 97, 7, 0.28);
-  --text-main: #2C2623;
-  --text-muted: #5C544F;
-  --badge-bg: rgba(150, 97, 7, 0.14);
-  --translit-bg: rgba(150, 97, 7, 0.07);
+  --bg-color: #F5EFEB !important;
+  --surface-color: #ECE5DE !important;
+  --card-bg: #FAF6F2 !important;
+  --card-border: rgba(150, 97, 7, 0.28) !important;
+  --text-main: #2C2623 !important;
+  --text-muted: #5C544F !important;
+  --badge-bg: rgba(150, 97, 7, 0.14) !important;
+  --translit-bg: rgba(150, 97, 7, 0.07) !important;
 }
 
 * {
@@ -453,11 +461,19 @@ body.lang-en .tafsir-shaan {
   padding: 6px;
   gap: 4px;
   border-bottom: 1px solid var(--card-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sidebar-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .sidebar-tab {
-  flex: 1;
-  padding: 8px 4px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding: 7px 11px;
   border-radius: 8px;
   font-size: 12px;
   font-weight: 700;
@@ -467,7 +483,7 @@ body.lang-en .tafsir-shaan {
   cursor: pointer;
   text-align: center;
   transition: all 0.2s;
-  font-family: var(--font-bengali);
+  font-family: inherit;
 }
 
 .sidebar-tab.active {
@@ -1139,12 +1155,242 @@ body.lang-en .tafsir-shaan {
   cursor: pointer;
 }
 
-/* Tajweed Classes */
-.tajweed-ghunna { color: #FF7F00; font-weight: bold; }
-.tajweed-ikhfa { color: #29B6F6; font-weight: bold; }
-.tajweed-qalqalah { color: #4CAF50; font-weight: bold; }
-.tajweed-iqlab { color: #AB47BC; font-weight: bold; }
-.tajweed-madd { color: #EC407A; font-weight: bold; }
+/* ========================================================
+   Manzil & Root Styles
+   ======================================================== */
+.manzil-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.manzil-card:hover {
+  border-color: var(--primary-gold);
+  transform: translateY(-1px);
+}
+
+.manzil-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.manzil-badge {
+  background: var(--gold-tint);
+  color: var(--primary-gold);
+  border: 1px solid var(--primary-gold);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.manzil-day {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.manzil-title {
+  color: var(--primary-gold);
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.manzil-range {
+  font-size: 12.5px;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.manzil-instruction {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  background: var(--translit-bg);
+  padding: 8px 10px;
+  border-radius: 6px;
+  border-left: 3px solid var(--primary-gold);
+}
+
+/* Root Items */
+.root-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.root-item:hover {
+  border-color: var(--primary-gold);
+  background: var(--gold-tint);
+}
+
+.root-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.root-ar {
+  font-family: var(--font-arabic);
+  font-size: 22px;
+  color: var(--primary-gold);
+  direction: rtl;
+  min-width: 50px;
+  text-align: center;
+}
+
+.root-info {
+  min-width: 0;
+}
+
+.root-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.root-meaning {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 170px;
+}
+
+.root-badge {
+  background: var(--badge-bg);
+  color: var(--primary-gold);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Root Detail Modal */
+.root-modal-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.root-modal-ar {
+  font-family: var(--font-arabic);
+  font-size: 34px;
+  color: var(--primary-gold);
+  text-align: center;
+  direction: rtl;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.root-derivative-tag {
+  display: inline-block;
+  font-family: var(--font-arabic);
+  font-size: 18px;
+  color: var(--primary-gold);
+  background: var(--gold-tint);
+  border: 1px solid var(--card-border);
+  padding: 3px 10px;
+  border-radius: 6px;
+  margin: 3px;
+  direction: rtl;
+}
+
+/* ========================================================
+   Tajweed Character-Level Colors (Desktop / Android Parity)
+   ======================================================== */
+.tajweed-madd {
+  color: #F87171;
+  font-weight: 600;
+}
+.tajweed-ghunnah,
+.tajweed-ghunna {
+  color: #34D399;
+  font-weight: 600;
+}
+.tajweed-qalqalah {
+  color: #38BDF8;
+  font-weight: 600;
+}
+.tajweed-iqlab {
+  color: #FBBF24;
+  font-weight: 600;
+}
+.tajweed-waqf {
+  color: #FCD34D;
+  font-size: 0.84em;
+  vertical-align: 0.22em;
+  display: inline-block;
+  line-height: 1;
+}
+
+/* Light Theme Tajweed */
+[data-theme="light"] .tajweed-madd,
+body.theme-light .tajweed-madd {
+  color: #DC2626;
+}
+[data-theme="light"] .tajweed-ghunnah,
+[data-theme="light"] .tajweed-ghunna,
+body.theme-light .tajweed-ghunnah,
+body.theme-light .tajweed-ghunna {
+  color: #16A34A;
+}
+[data-theme="light"] .tajweed-qalqalah,
+body.theme-light .tajweed-qalqalah {
+  color: #0284C7;
+}
+[data-theme="light"] .tajweed-iqlab,
+body.theme-light .tajweed-iqlab {
+  color: #D97706;
+}
+[data-theme="light"] .tajweed-waqf,
+body.theme-light .tajweed-waqf {
+  color: #B45309;
+}
+
+/* Sepia Theme Tajweed */
+[data-theme="sepia"] .tajweed-madd,
+body.theme-sepia .tajweed-madd {
+  color: #C53030;
+}
+[data-theme="sepia"] .tajweed-ghunnah,
+[data-theme="sepia"] .tajweed-ghunna,
+body.theme-sepia .tajweed-ghunnah,
+body.theme-sepia .tajweed-ghunna {
+  color: #15803D;
+}
+[data-theme="sepia"] .tajweed-qalqalah,
+body.theme-sepia .tajweed-qalqalah {
+  color: #0369A1;
+}
+[data-theme="sepia"] .tajweed-iqlab,
+body.theme-sepia .tajweed-iqlab {
+  color: #B45309;
+}
+[data-theme="sepia"] .tajweed-waqf,
+body.theme-sepia .tajweed-waqf {
+  color: #92400E;
+}
 
 /* ========================================================
    Floating Audio Player Bar
@@ -1718,7 +1964,10 @@ body.lang-en .tafsir-shaan {
   }
 
   .sidebar-tabs {
-    display: none !important; /* Bottom nav handles all tab switching */
+    display: flex !important;
+    overflow-x: auto !important;
+    padding: 6px 8px !important;
+    gap: 4px !important;
   }
 
   .sidebar-search-box {

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kanzuliman-pwa-v4';
+const CACHE_NAME = 'kanzuliman-pwa-v6';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -22,6 +22,9 @@ const CORE_ASSETS = [
   './data/suras.json',
   './data/paras.json',
   './data/sajdahs.json',
+  './data/manzils.json',
+  './data/roots.json',
+  './data/online_tafsirs.json',
   './data/about.json'
 ];
 
